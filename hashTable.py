@@ -327,3 +327,135 @@ if __name__ == "__main__":
     print htable
     print htable.get(12)
     print htable.search(35)
+
+3. Liear hash table
+import math 
+
+class Entry:
+    """ Entry
+
+        Used in every hashtable but the ChainedHashtable, an Entry is a key, value pair
+    """
+
+    def __str__(self):
+        return str(self.value)
+
+    def __init__(self, key = 0, value = 0):
+        self.key = key
+        self.value = value
+        
+def AuxiliaryHash(key, size):
+    A = 0.618
+    return int(math.floor(size * ((key * A) % 1)))
+
+def LinearHash(key, i, size):
+    return (AuxiliaryHash(key, size) + i) % size
+
+class LinearHashtable:
+    """
+    Linear Hashtable
+    Keys and values are stored in an associative array, and probed for values
+    by searching linearly through the table
+    """
+    size = 32
+
+    def __init__(self):
+        self.entries = [None] * LinearHashtable.size
+
+    def get(self, key):
+        i = 0
+        entry = self.entries[self.hash(key, i)]
+        while entry is None or entry.key != key:
+            i += 1
+            if i == LinearHashtable.size:
+                return None
+            entry = self.entries[self.hash(key, i)]
+        return entry.value
+
+    def search(self, key):
+        i = 0
+        search_result = ""
+        entry = self.entries[self.hash(key, i)]
+        search_result = str(self.hash(key, i)) + " "
+        while entry is None or entry.key != key:
+            i += 1
+            if i == LinearHashtable.size:
+                return search_result + "-1"
+            entry = self.entries[self.hash(key, i)]
+            search_result += str(self.hash(key, i)) + " "
+        return search_result
+
+    def put(self, key, value):
+        i = 0
+        entry = self.entries[self.hash(key, i)]
+        while entry is not None and entry.key != key:
+            i += 1
+            if i == LinearHashtable.size:
+                return
+            entry = self.entries[self.hash(key, i)]
+        if entry is None:
+            entry = Entry(key=key, value=value)
+            self.entries[self.hash(key, i)] = entry
+        else:
+            entry.value = value
+
+    def insert(self, value):
+        self.put(value, value)
+
+    def hash(self, key, i):
+        return LinearHash(key, i, LinearHashtable.size)
+
+    def __str__(self):
+        lines = []
+        for i in range(len(self.entries)):
+            if self.entries[i] is None:
+                lines.append("" + str(i) + "\t" + "-1")
+            else:
+                lines.append("" + str(i) + "\t" + str(self.entries[i].value))
+        return "\n".join(lines)
+
+'''
+0    -1
+1    81
+2    -1
+3    -1
+4    -1
+5    -1
+6    -1
+7    -1
+8    -1
+9    -1
+10    -1
+11    -1
+12    -1
+13    12
+14    -1
+15    -1
+16    -1
+17    -1
+18    -1
+19    1
+20    35
+21    -1
+22    -1
+23    -1
+24    -1
+25    100
+26    -1
+27    -1
+28    -1
+29    -1
+30    -1
+31    21
+12
+20 
+'''
+if __name__ == "__main__":
+    theValues = [100, 1, 21, 35, 81, 12]
+    htable = LinearHashtable()
+    for value in theValues:
+        htable.insert(value)
+
+    print htable
+    print htable.get(12)
+    print htable.search(35)
