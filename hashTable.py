@@ -592,3 +592,130 @@ if __name__ == "__main__":
     print htable
     print htable.get(12)
     print htable.search(35)
+
+5. Double hash table
+class Entry:
+    """ Entry
+
+        Used in every hashtable but the ChainedHashtable, an Entry is a key, value pair
+    """
+
+    def __str__(self):
+        return str(self.value)
+
+    def __init__(self, key = 0, value = 0):
+        self.key = key
+        self.value = value
+        
+def DoubleHash(key, i, size):
+    return int((DivisionHash(key, size) + i * AuxiliaryHash2(key, size)) % size)
+
+def AuxiliaryHash2(key, size):
+    return 1 + (key % (size - 1))
+
+def DivisionHash(key, size):
+    return key % size
+
+class DoubleHashtable:
+    size = 31
+
+    def __init__(self):
+        self.entries = [None] * DoubleHashtable.size
+
+    def get(self, key):
+        i = 0
+        entry = self.entries[self.hash(key, i)]
+        while entry is None or entry.key != key:
+            i += 1
+            if i == DoubleHashtable.size:
+                return None
+            entry = self.entries[self.hash(key, i)]
+        return entry.value
+
+    def put(self, key, value):
+        i = 0
+        entry = self.entries[self.hash(key, i)]
+        while entry is not None and entry.key != key:
+            i += 1
+            if i+1 == DoubleHashtable.size:
+                return
+            entry = self.entries[self.hash(key, i)]
+        if entry is None:
+            entry = Entry(key=key, value=value)
+            self.entries[self.hash(key, i)] = entry
+        else:
+            entry.value = value
+
+    def search(self, key):
+        i = 0
+        search_result = ""
+        entry = self.entries[self.hash(key, i)]
+        search_result = str(self.hash(key, i)) + " "
+        while entry is None or entry.key != key:
+            i += 1
+            if i+1 == DoubleHashtable.size:
+                return search_result + "-1"
+            entry = self.entries[self.hash(key, i)]
+            search_result += str(self.hash(key, i)) + " "
+        return search_result
+
+    def insert(self, value):
+        self.put(value, value)
+
+    def hash(self, key, i):
+        return DoubleHash(key, i, DoubleHashtable.size)
+
+    def __str__(self):
+        lines = []
+        for i in range(len(self.entries)):
+            if self.entries[i] is None:
+                lines.append("" + str(i) + "\t" + "-1")
+            else:
+                lines.append("" + str(i) + "\t" + str(self.entries[i].value))
+        return "\n".join(lines)
+
+'''
+0    -1
+1    1
+2    -1
+3    -1
+4    35
+5    -1
+6    -1
+7    100
+8    -1
+9    -1
+10    -1
+11    -1
+12    -1
+13    -1
+14    -1
+15    -1
+16    -1
+17    -1
+18    -1
+19    81
+20    -1
+21    21
+22    -1
+23    -1
+24    -1
+25    -1
+26    -1
+27    -1
+28    -1
+29    -1
+30    -1
+None
+4 
+'''
+if __name__ == "__main__":
+    
+    theValues = [100, 1, 21, 35, 81]
+    htable = DoubleHashtable()
+    for value in theValues:
+        htable.insert(value)
+
+    print htable
+    print htable.get(12)
+    print htable.search(35)
