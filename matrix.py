@@ -1,5 +1,103 @@
 # arrayMatrix
-from newarray2d import Array2D
+
+import ctypes
+
+class Array:
+    # Init
+    def __init__(self, size):
+        assert size > 0, "size should be above than 0"
+
+        PyObjects = ctypes.py_object * size
+        self.slots = PyObjects()
+        self.size = size
+        self.clear(None)
+
+    # Len
+    def __len__(self):
+        return self.size
+
+    # Get item
+    def __getitem__(self, index):
+        assert index >= 0 and index < self.size, "index must be within the valid range."
+
+        return self.slots[index]
+
+    # Set item
+    def __setitem__(self, index, value):
+        assert index >= 0 and index < self.size, "index must be within the valid range."
+
+        self.slots[index] = value
+
+    # Clear
+    def clear(self, value):
+        for i in range(self.size):
+            self.slots[i] = value
+
+    # Iterator
+    def __iter__(self):
+        return ArrayIterator(self.slots)
+
+class ArrayIterator:
+    # Init
+    def __init__(self, slots):
+        self.slots = slots
+        self.index = 0
+    # Iter
+    def __iter__(self):
+        return self
+    # Next
+    def next(self):
+        if self.index < len(self.slots):
+            item = self.slots[self.index]
+            self.index += 1
+            return item
+        else:
+            raise StopIteration
+
+class Array2D:
+    # init
+    def __init__(self, nrows, ncols):
+        self._theRows = Array(nrows)
+
+        for i in range(len(self._theRows)):
+            self._theRows[i] = Array(ncols)
+
+    # the number of rows
+    def numRows(self):
+        return len(self._theRows)
+
+    # the number of cols
+    def numCols(self):
+        return len(self._theRows[0])
+
+    # clear the array
+    def clear(self, value):
+        for i in range(self.numRows()):
+            self._theRows[i].clear(value)
+
+    # get the item
+    def __getitem__(self, nTuple):
+        assert len(nTuple) == 2, "The size of tuple should be 2."
+        row = nTuple[0]
+        col = nTuple[1]
+
+        assert row >= 0 and row < self.numRows() and \
+             col >= 0 and col < self.numCols(), "out of subscript"
+
+        the1dArray = self._theRows[row]
+        return the1dArray[col]
+
+    # set the itme
+    def __setitem__(self, nTuple, value):
+        assert len(nTuple) == 2, "The size of tuple should be 2."
+        row = nTuple[0]
+        col = nTuple[1]
+
+        assert row >= 0 and row < self.numRows() and \
+             col >= 0 and col < self.numCols(), "out of subscript"
+
+        the1dArray = self._theRows[row]
+        the1dArray[col] = value
 
 # Implement a matrix
 class MyMatrix:
