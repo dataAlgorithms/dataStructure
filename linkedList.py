@@ -1,65 +1,185 @@
 1. Single Linked list
-class LinkedList:
-    # Init
+class SingleLinkedList:
     def __init__(self):
         self._head = None
         self._size = 0
 
-    def __len__(self):
+    def __length__(self):
         return self._size
 
     def isEmpty(self):
         return self._size == 0
 
     def add(self, item):
-        newNode = _LinkedListNode(item)
+        newNode = SingleLinkedListNode(item)
         newNode.next = self._head
         self._head = newNode
+
         self._size += 1
 
-    def remove(self, item):
-        preNode = None
-        curNode = self._head
-        while curNode is not None and curNode.item != item:
-            preNode = curNode
-            curNode = curNode.next
+    def insert(self, item, position):
+        if position == 0:
+            # insert at the beginning
+            newNode = SingleLinkedListNode(item)
+            newNode.next = self._head
+            self._head = newNode
 
-        assert curNode is not None, "curNode is not exist"
-        if curNode is self._head:
-            self._head = curNode.next
+            self._size += 1
+
+        elif position == -1:
+            # insert at the ending
+            newNode = SingleLinkedListNode(item)
+            
+            preNode = self._head
+            curNode = self._head
+            while curNode is not None:
+                preNode = curNode
+                curNode = curNode.next
+
+            preNode.next = newNode
+            
+            self._size += 1
+
         else:
+            # insert at the middle
+            newNode = SingleLinkedListNode(item)
+            if self._head is None:
+                self._head  = newNode
+                self._size += 1
+
+            else:
+                curNode = self._head
+                preNode = self._head
+                index = 0
+                while curNode is not None and index != position:
+                    preNode = curNode
+                    curNode = curNode.next
+                    index += 1
+
+                newNode.next = curNode
+                preNode.next = newNode
+                self._size += 1
+
+    def removePos(self, position):
+        assert not self.isEmpty(), "LinkedList is empty!"
+        if position == 0:
+            # remove the first item
+            self._head = self._head.next
+            self._size -= 1
+        elif position == -1:
+            # remove the last item
+            preNode = self._head
+            curNode = self._head
+            while curNode.next is not None:
+                preNode = curNode
+                curNode = curNode.next
+
+            preNode.next = None
+            self._size -= 1
+
+        else:
+            # remove the middle item
+            preNode = self._head
+            curNode = self._head
+            index = 0
+            while curNode is not None and index != position:
+                preNode = curNode
+                curNode = curNode.next
+
+                index += 1
+
             preNode.next = curNode.next
+            self._size -= 1
+
+    def remove(self, item):
+        assert not self.isEmpty(), "Linkedlist is empty!"
+        preNode = self._head 
+        curNode = self._head 
+        while curNode is not None and curNode.item !=  item:
+            preNode = curNode 
+            curNode = curNode.next 
+            
+        assert curNode.item is not None, "item is not in!"
+        if curNode is self._head:
+            self._head = self._head.next 
+        else:
+            preNode.next = curNode.next 
+        
         self._size -= 1
-
-        return curNode.item
-
+            
     def __iter__(self):
-        return _LinkedListIter(self._head)
+        return SingleLinkedListIer(self._head)
 
-class _LinkedListNode:
-    # Init
+class SingleLinkedListNode:
     def __init__(self, item):
         self.item = item
         self.next = None
-
-class _LinkedListIter:
-    # Init
+        
+class SingleLinkedListIer:
     def __init__(self, head):
-        self._curNode = head
+        self._head = head 
     def __iter__(self):
-        return self
+        return self 
     def next(self):
-        if self._curNode is not None:
-            node = self._curNode.item
-            self._curNode = self._curNode.next
-            return node
+        if self._head is not None:
+            curNode = self._head.item 
+            self._head = self._head.next 
+            return curNode 
         else:
             raise StopIteration
+    
+'''
+smith: 
+ECON-101 HIST-340 MATH-121 CSCI-112 
 
+roberts: 
+ECON-101 CSCI-112 ANTH-230 POL-101 
+
+remove ECON-101 of smith
+
+
+smith: 
+HIST-340 MATH-121 CSCI-112 
+
+remove MATH-121 of smith
+
+
+smith: 
+HIST-340 CSCI-112 
+
+in check
+True
+False
+
+
+insert pos check
+
+
+smith: 
+nihao HIST-340 CSCI-112 
+
+smith: 
+nihao HIST-340 CSCI-112 nihao 
+
+smith: 
+nihao HIST-340 nihao CSCI-112 nihao 
+
+remove pos check
+
+
+smith: 
+HIST-340 nihao CSCI-112 nihao 
+
+smith: 
+HIST-340 nihao CSCI-112 
+
+smith: 
+HIST-340 CSCI-112
+'''    
 def test_linkedList():
     
     # init a set named smith
-    smith = LinkedList()
+    smith = SingleLinkedList()
     smith.add('CSCI-112')
     smith.add('MATH-121')
     smith.add('HIST-340')
@@ -70,7 +190,7 @@ def test_linkedList():
         print item,
     
     # init a set named roberts
-    roberts = LinkedList()
+    roberts = SingleLinkedList()
     roberts.add('POL-101')
     roberts.add('ANTH-230')
     roberts.add('CSCI-112')
@@ -98,6 +218,50 @@ def test_linkedList():
     print 'HIST-340' in smith 
     print 'MATH-121' in smith
     
+    print '\r\rinsert pos check'
+    item = 'nihao'
+    smith.insert(item, 0)
+    
+    print '\r\rsmith: '
+    for item in smith:
+        print item,    
+        
+    item = 'nihao'
+    smith.insert(item, -1)
+    
+    print '\r\rsmith: '
+    for item in smith:
+        print item,    
+                
+    item = 'nihao'
+    smith.insert(item, 2)
+    
+    print '\r\rsmith: '
+    for item in smith:
+        print item,    
+        
+    print '\r\rremove pos check'
+    item = 'nihao'
+    smith.removePos(0)
+    
+    print '\r\rsmith: '
+    for item in smith:
+        print item,    
+        
+    item = 'nihao'
+    smith.removePos(-1)
+    
+    print '\r\rsmith: '
+    for item in smith:
+        print item,    
+                
+    item = 'nihao'
+    smith.removePos(1)
+    
+    print '\r\rsmith: '
+    for item in smith:
+        print item,   
+            
 if __name__ == "__main__":
     test_linkedList()
     
