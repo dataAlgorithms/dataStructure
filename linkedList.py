@@ -406,103 +406,162 @@ if __name__ == "__main__":
     test_linkedListBag()
 
 3. double linked list
-class DoubleSortedLinkedList:
-    # Init
+class DoubleLinkedList:
     def __init__(self):
         self._head = None
-        self._tail = None
         self._size = 0
-    # Length
+
     def __len__(self):
         return self._size
-    # IsEmpty
+
     def isEmpty(self):
         return self._size == 0
-    # Contains
-    def __contains__(self, item):
-        if self._head is None:
-            return False
-        else:
-            curNode = self._head
-            while curNode is not None and curNode.value != item:
-                curNode = curNode.next
-            if curNode is None:
-                return False
-            else:
-                return curNode.value == item 
-        
-    # Add
+
     def add(self, item):
-        newnode = _DLinkListNode(item)
+        newNode = DoubleLinkedListNode(item)
         if self._head is None:
-            self._head = newnode
-            self._tail = newnode
-        elif item < self._head.value:
-            newnode.next = self._head
-            self._head.prev = newnode
-            self._head = newnode
-        elif item > self._tail.value:
-            self._tail.next = newnode
-            newnode.prev = self._tail
-            self._tail = newnode
+            self._head = newNode 
+            self._size += 1
         else:
-            node = self._head
-            while self._head is not None and node.value < item:
-                node = node.next
+            newNode.next = self._head
+            self._head.prev = newNode
+            self._head = newNode
+            self._size += 1
 
-            newnode.next = node
-            newnode.prev = node.prev
-            node.prev.next = newnode
-            node.prev = newnode
-
-        self._size += 1
-    # Remove
-    def remove(self, item):
-        assert item in self, "item is not in"
-        if self._head is None:
-            return False
-        elif item == self._head.value:
-            self._head = self._head.next
-        elif item == self._tail.value:
-            self._tail = self._tail.prev
-        else:
+    def insert(self, item, position):
+        newNode = DoubleLinkedListNode(item)
+        if position == 0:
+            newNode.next = self._head
+            self._head.prev = newNode
+            self._head = newNode
+            self._size += 1
+        elif position == -1:
+            preNode = self._head
             curNode = self._head
-            while curNode is not None and curNode.value != item:
+            while curNode is not None:
+                preNode = curNode
                 curNode = curNode.next
-            curNode.next.prev = curNode.prev
-            curNode.prev.next = curNode.next
-        self._size -= 1
-    # Iter
-    def __iter__(self):
-        return _DLinkListIter(self._head)
 
-# Double Linked list Iter
-class _DLinkListIter:
-    # Init
+            preNode.next = newNode
+            newNode.prev = preNode
+            self._size += 1
+        else:
+            preNode = self._head
+            curNode = self._head
+            index = 0
+            while curNode is not None and index != position:
+                preNode = curNode
+                curNode = curNode.next
+                index += 1
+
+            newNode.next = curNode
+            newNode.prev = preNode
+            preNode.next = newNode
+            curNode.prev = newNode
+
+            self._size += 1
+
+    def remove(self, item):
+        assert not self.isEmpty(), "Linked list is empty!"
+        preNode = self._head
+        curNode = self._head
+        while curNode is not None and curNode.item != item:
+            preNode = curNode
+            curNode = curNode.next
+
+        if curNode is self._head:
+            self._head = self._head.next
+            self._size -= 1
+        else:
+            preNode.next = curNode.next
+            self._size -= 1
+
+    def __iter__(self):
+        return DoubleLinkedListIter(self._head)
+
+class DoubleLinkedListNode:
+    def __init__(self, item):
+        self.item = item
+        self.next = None
+        self.prev = None
+
+class DoubleLinkedListIter:
     def __init__(self, head):
-        self._curNode = head
+        self.head = head
     def __iter__(self):
         return self
     def next(self):
-        if self._curNode != None:
-            value = self._curNode.value
-            self._curNode = self._curNode.next
-            return value
-        raise StopIteration
+        if self.head is not None:
+            curNode = self.head.item
+            self.head = self.head.next
+            return curNode
+        else:
+            raise StopIteration 
+ 
+'''
+primary smith
+ECON-101
+HIST-340
+MATH-121
+CSCI-112
 
-# Double Linked list node
-class _DLinkListNode:
-    # Init
-    def __init__(self, value):
-        self.value = value
-        self.next = None
-        self.prev = None
-        
+deleted smith
+ECON-101
+MATH-121
+CSCI-112
 
-def test_sorteddoublelinkedlist():
+lenght of smith
+3
+
+check whether not in
+False
+
+check whether in
+True
+
+check insert
+nihao
+ECON-101
+MATH-121
+CSCI-112
+
+
+nihao
+ECON-101
+MATH-121
+CSCI-112
+nihao
+
+
+nihao
+ECON-101
+nihao
+MATH-121
+CSCI-112
+nihao
+
+check remove
+ECON-101
+nihao
+MATH-121
+CSCI-112
+nihao
+1111
+
+ECON-101
+MATH-121
+CSCI-112
+nihao
+2222
+
+ECON-101
+MATH-121
+CSCI-112
+'''       
+def test_doublelinkedlist():
     
     # init a linkedlist named smith
-    smith = DoubleSortedLinkedList()
+    smith = DoubleLinkedList()
     smith.add('CSCI-112')
     smith.add('MATH-121')
     smith.add('HIST-340')
@@ -531,32 +590,54 @@ def test_sorteddoublelinkedlist():
  
     # check whether in
     print '\ncheck whether in'
-    print 'ECON-101' in smith       
+    print 'ECON-101' in smith      
+    
+    # check insert
+    print '\ncheck insert'
+    item = 'nihao'
+    smith.insert(item, 0)
+    
+    for item in smith:
+        print item
         
-'''
-primary smith
-CSCI-112
-ECON-101
-HIST-340
-MATH-121
+    print '\n'
+        
+    item = 'nihao'
+    smith.insert(item, -1)
+    
+    for item in smith:
+        print item
 
-deleted smith
-CSCI-112
-ECON-101
-MATH-121
-
-lenght of smith
-3
-
-check whether not in
-False
-
-check whether in
-True
-
-'''
+    print '\n'
+    
+    item = 'nihao'
+    smith.insert(item, 2)
+    
+    for item in smith:
+        print item
+        
+    # check remove
+    print '\ncheck remove'
+    smith.remove('nihao')
+    
+    for item in smith:
+        print item
+       
+    print '1111\n'
+     
+    smith.remove('nihao')
+    
+    for item in smith:
+        print item
+        
+    print '2222\n'
+     
+    smith.remove('nihao')
+    
+    for item in smith:
+        print item
 if __name__ == "__main__":
-    test_sorteddoublelinkedlist()
+    test_doublelinkedlist()
 
 4. circular linked list
 class CircularSortedLinkedList:
