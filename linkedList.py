@@ -639,7 +639,7 @@ def test_doublelinkedlist():
 if __name__ == "__main__":
     test_doublelinkedlist()
 
-4. circular linked list
+4. sorted circular linked list
 class CircularSortedLinkedList:
     # Init
     def __init__(self):
@@ -790,3 +790,263 @@ def test_sortedcircularlinkedlist():
         
 if __name__ == "__main__":
     test_sortedcircularlinkedlist()
+
+5. circular linked list
+class CircularLinkedList:
+    def __init__(self):
+        self._head = None
+        self._size = 0
+
+    def __len__(self):
+        return self._size
+
+    def isEmpty(self):
+        return self._size == 0
+
+    def add(self, item):
+        newNode = _CircularLinkedListNode(item)
+        if self._head is None:
+            newNode.next = newNode 
+            self._head = newNode 
+            self._size += 1
+        else:
+            curNode = self._head 
+            while curNode.next is not self._head:
+                curNode = curNode.next 
+            
+            curNode.next = newNode 
+            newNode.next = self._head
+            self._size += 1
+            
+    def insertPos(self, pos, item):
+        newNode = _CircularLinkedListNode(item)
+        if pos == 0:
+            # insert at the front
+            curNode = self._head
+            while curNode.next is not self._head:
+                curNode = curNode.next
+
+            curNode.next = newNode
+            newNode.next = self._head
+            self._head = newNode
+            self._size += 1
+        elif pos == -1:
+            # insert at the end
+            curNode = self._head
+            while curNode.next is not self._head:
+                curNode = curNode.next
+            curNode.next = newNode
+            newNode.next = self._head
+
+            self._size += 1
+        else:
+            # insert at the pos position
+            preNode = self._head
+            curNode = self._head
+            index = 0
+            while curNode.next is not self._head and index != pos:
+                preNode = curNode
+                curNode = curNode.next    
+                index += 1        
+ 
+            assert curNode.next is not self._head, "pos is not exist!"
+            preNode.next = newNode
+            newNode.next = curNode
+
+            self._size += 1
+
+    def deletePos(self, pos):
+        assert not self.isEmpty(), "Circurlar linked list is empty"
+        if pos == 0:
+            # delete the item at the front
+            curNode = self._head
+            while curNode.next is not self._head:
+                curNode = curNode.next
+
+            curNode.next = self._head.next
+            self._head = self._head.next
+            self._size -= 1
+        elif pos == -1:
+            # delete the item at the end
+            preNode = self._head
+            curNode = self._head
+            while curNode.next is not self._head:
+                preNode = curNode
+                curNode = curNode.next
+
+            preNode.next = self._head
+            self._size -= 1
+        else:
+            # delete the item at the pos position
+            preNode = self._head
+            curNode = self._head
+            index = 0
+            while curNode.next is not self._head and index != pos:
+                preNode = curNode
+                curNode = curNode.next
+                index += 1
+
+            assert curNode.next is not self._head, "pos is not exist!"
+            preNode.next = curNode.next
+            self._size -= 1 
+
+    def remove(self, item):
+        assert not self.isEmpty(), "Linked list is empty!"
+        preNode = self._head
+        curNode = self._head
+        while curNode.next is not self._head and curNode.item != item:
+            preNode = curNode
+            curNode = curNode.next        
+
+        assert curNode.item == item, "item is not exist!"
+        if curNode is self._head:
+            preNode.next = self._head.next
+            self._head = self._head.next
+            self._size -= 1
+        else:
+            preNode.next = curNode.next        
+            self._size -= 1
+
+    def __iter__(self):
+        return _CircularLinkedListIter(self._head, self._size)
+
+class _CircularLinkedListNode:
+    def __init__(self, item):
+        self.item = item
+        self.next = None
+
+class _CircularLinkedListIter:
+    def __init__(self, head, size):
+        self._head = head
+        self._size = size 
+        self._cIndex = 0
+        self._curNode = head
+    def __iter__(self):
+        return self
+    def next(self):
+        if self._cIndex < self._size:
+            tmpNode = self._curNode
+            self._curNode = self._curNode.next
+            self._cIndex += 1
+            return tmpNode.item
+        else:
+            raise StopIteration
+        
+def test_circularlinkedlist():
+    
+    # init a linkedlist named smith
+    smith = CircularLinkedList()
+    smith.add('CSCI-112')
+    smith.add('MATH-121')
+    smith.add('HIST-340')
+    smith.add('ECON-101')
+    
+    # print smith
+    print 'primary smith'
+    for item in smith:
+        print item
+        
+    # remove one item
+    smith.remove('MATH-121')
+    smith.remove('HIST-340')
+        
+    # print smith
+    print '\ndeleted smith'
+    for item in smith:
+        print item
+        
+    # pring length
+    print '\nlenght of smith'
+    print len(smith)
+    
+    # check whether not in
+    print '\ncheck whether not in'
+    print 'abc' in smith
+ 
+    # check whether in
+    print '\ncheck whether in'
+    print 'ECON-101' in smith       
+        
+    # insert 
+    smith.insertPos(0, 'nihao')
+    for item in smith:
+        print item    
+    
+    print '\r'    
+    smith.insertPos(-1, 'nihao')
+    
+    for item in smith:
+        print item    
+    print '\r' 
+            
+    smith.insertPos(1, 'nihao')
+
+    for item in smith:
+        print item    
+    print '\r'
+    
+    # deletePos
+    smith.deletePos(0)
+    for item in smith:
+        print item    
+    print '\r'
+
+    smith.deletePos(-1)
+    for item in smith:
+        print item    
+    print '\r'
+                
+    # delete all
+    smith.remove('CSCI-112')
+    smith.remove('ECON-101')
+    
+    for item in smith:
+        print item
+     
+'''
+primary smith
+CSCI-112
+MATH-121
+HIST-340
+ECON-101
+
+deleted smith
+CSCI-112
+ECON-101
+
+lenght of smith
+2
+
+check whether not in
+False
+
+check whether in
+True
+nihao
+CSCI-112
+ECON-101
+
+nihao
+CSCI-112
+ECON-101
+nihao
+
+nihao
+nihao
+CSCI-112
+ECON-101
+nihao
+
+nihao
+CSCI-112
+ECON-101
+nihao
+
+nihao
+CSCI-112
+ECON-101
+
+nihao
+'''       
+if __name__ == "__main__":
+    test_circularlinkedlist()
