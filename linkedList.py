@@ -1623,12 +1623,20 @@ struct ListNode* newListNode(int value) {
     return temp;
 }
 
-void searchElementVoid(int k, struct LinkedBlock **fLinkedBlock, struct ListNode **fListNode) {
+int searchElementVoid(int k, struct LinkedBlock **fLinkedBlock, struct ListNode **fListNode) {
     //find the block
     int j = (k+blockSize-1)/blockSize; //kth node is in the jth block
     struct LinkedBlock* p = blockHead;
+
+    if(blockHead == NULL) {
+    	return -1;
+	}
+	
     while(--j) {
         p = p->next;
+        if(p == NULL) {
+        	return -1;
+		}
     }
 
     *fLinkedBlock = p;
@@ -1638,11 +1646,14 @@ void searchElementVoid(int k, struct LinkedBlock **fLinkedBlock, struct ListNode
     k = k%blockSize;
     if(k==0) k = blockSize;
     k=p->nodeCount+1-k;
+    
     while(k--) {
         q = q->next;
     }
 
     *fListNode = q;
+    
+    return 0;
 }
 
 //start shift operation from block *p
@@ -1683,7 +1694,7 @@ void addElement(int k, int x) {
         blockHead->head->next=blockHead->head;
         blockHead->nodeCount++;
     }else {
-        if (k==0) {//special case for k=0
+        if(k==0) {//special case for k=0
             p = blockHead->head;
             q = p->next;
             p->next=newListNode(x);
@@ -1691,8 +1702,8 @@ void addElement(int k, int x) {
             blockHead->head=p->next;
             blockHead->nodeCount++;
             shift(blockHead);
-        }else{
-            searchElement(k,&r,&p);
+        }else {
+            searchElementVoid(k,&r,&p);
             q = p;
             while(q->next!=p) q = q->next;
             q->next=newListNode(x);
@@ -1704,31 +1715,44 @@ void addElement(int k, int x) {
 }
 
 int searchElement(int k) {
+	int flag = 0;
+	
     struct ListNode *p;
     struct LinkedBlock *q;
-    searchElementVoid(k, &q, &p);
-    return p->value;
+    flag = searchElementVoid(k, &q, &p);
+    if(flag != -1) {
+        return p->value;
+    } else {
+    	return -1;
+	}
 }
 
 int testUnRolledLinkedList() {
     int tt=clock();
     int m, i, k, x;
     char cmd[10];
+    int flag;
+    printf("Count of doing cmd: ");
     scanf("%d", &m);
     blockSize = (int)(sqrt(m-0.001))+1;
 
     for(i=0; i<m; i++) {
+    	printf("Please input cmd, eg, add, search.\n");
         scanf("%s", cmd);
         if(strcmp(cmd,"add")==0) {
-        	printf("Doing add!");
+        	printf("Doing add, please input two number at once\n");
             scanf("%d %d", &k, &x);
             addElement(k, x);
         } else if(strcmp(cmd, "search")== 0) {
-        	printf("Doing search!");
+        	printf("Doing search, please input the query number!\n");
             scanf("%d", &k);
-            printf("%d\n", searchElement(k));
+            flag = searchElement(k);
+            if(flag != -1) {
+                printf("%d\n", searchElement(k));
+            } else {
+            	printf("No item!\n");
+			}
         } else {
-        	printf("Wrong input!");
             fprintf(stderr, "Wrong Input\n");
         }
     }
