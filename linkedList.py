@@ -1189,3 +1189,555 @@ Python call c refer:
 http://www.bjhee.com/python-ctypes.html
 http://coolshell.cn/articles/671.html
 '''
+
+7. unrolled linked list 
+'''
+Java: (not verify by now)
+/*
+ *  Java Program to Implement Unrolled Linked List
+ */
+ 
+import java.util.Scanner;
+ 
+/*  Class ULLNode  */
+class ULLNode    
+{
+    ULLNode next;
+    int numElements;
+    int array[];
+ 
+    /* Constructor */
+    public ULLNode(int n)
+    {
+        next = null;
+        numElements = 0;
+        array = new int[n];        
+    }
+}
+ 
+/* Class UnrolledLinkedList */
+class UnrolledLinkedList
+{
+    private ULLNode start;
+    private ULLNode end;
+    private int sizeNode;
+    private int nNode;
+ 
+    /* Constructor */
+    public UnrolledLinkedList(int capacity)
+    {
+        start = null;
+        end = null;
+        nNode = 0;
+        sizeNode = capacity + 1;
+    }
+    /*  Function to check if list is empty  */
+    public boolean isEmpty()
+    {
+        return start == null;
+    }
+    /*  Function to get size of list  */
+    public int getSize()
+    {
+        return nNode;
+    }  
+    /* Function to clear list */
+    public void makeEmpty()
+    {
+        start = null;
+        end = null;
+        nNode = 0;
+    }
+    /* Function to insert element */
+    public void insert(int x)
+    {
+        nNode++;
+        if (start == null)
+        {
+            start = new ULLNode(sizeNode);
+            start.array[0] = x;
+            start.numElements++;
+            end = start;
+            return;
+        }
+        if (end.numElements + 1 < sizeNode)
+        {
+            end.array[end.numElements] = x;
+            end.numElements++;                        
+        }
+        else
+        {
+            ULLNode nptr = new ULLNode(sizeNode);
+            int j = 0;
+            for (int i = end.numElements / 2 + 1; i < end.numElements; i++)
+                nptr.array[j++] = end.array[i];
+            nptr.array[j++] = x;
+            nptr.numElements = j;
+            end.numElements = end.numElements/2 + 1;
+            end.next = nptr;  
+            end = nptr;          
+        }        
+    }
+    /* Function to display list */
+    public void display()
+    {
+        System.out.print("\nUnrolled Linked List = ");
+        if (nNode == 0) 
+        {
+            System.out.print("empty\n");
+            return;
+        }
+        System.out.println();
+        ULLNode ptr = start;
+        while (ptr != null)
+        {
+            for (int i = 0; i < ptr.numElements; i++)
+                System.out.print(ptr.array[i] +" ");
+            System.out.println();            
+            ptr = ptr.next;
+        }
+    }
+ 
+}
+ 
+/*  Class UnrolledLinkedListTest  */
+public class UnrolledLinkedListTest
+{    
+    public static void main(String[] args)
+    {             
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Unrolled Linked List Test\n");  
+        System.out.println("Enter array size of each node");       
+        /* Creating object of class UnrolledLinkedList */
+        UnrolledLinkedList ull = new UnrolledLinkedList(scan.nextInt() ); 
+ 
+        char ch;
+        /*  Perform list operations  */
+        do
+        {
+            System.out.println("\nUnrolled Linked List Operations\n");
+            System.out.println("1. insert");
+            System.out.println("2. check empty");
+            System.out.println("3. get size");  
+            System.out.println("4. clear");            
+            int choice = scan.nextInt();            
+            switch (choice)
+            {
+            case 1 :  
+                System.out.println("Enter integer element to insert");
+                ull.insert( scan.nextInt() );                     
+                break;                          
+            case 2 : 
+                System.out.println("Empty status = "+ ull.isEmpty());
+                break;                   
+            case 3 : 
+                System.out.println("Size = "+ ull.getSize() +" \n");
+                break; 
+            case 4 : 
+                System.out.println("List Cleared\n");
+                ull.makeEmpty();
+                break;                        
+            default : 
+                System.out.println("Wrong Entry \n ");
+                break;   
+            }
+            /*  Display List  */ 
+            ull.display();
+ 
+            System.out.println("\nDo you want to continue (Type y or n) \n");
+            ch = scan.next().charAt(0);                        
+        } while (ch == 'Y'|| ch == 'y');               
+    }
+}
+Unrolled Linked List Test
+ 
+Enter array size of each node
+5
+ 
+Unrolled Linked List Operations
+ 
+1. insert
+2. check empty
+3. get size
+4. clear
+1
+Enter integer element to insert
+23
+ 
+Unrolled Linked List =
+23
+ 
+Do you want to continue (Type y or n)
+ 
+y
+ 
+Unrolled Linked List Operations
+ 
+1. insert
+2. check empty
+3. get size
+4. clear
+1
+Enter integer element to insert
+7
+ 
+Unrolled Linked List =
+23 7
+ 
+Do you want to continue (Type y or n)
+ 
+y
+ 
+Unrolled Linked List Operations
+ 
+1. insert
+2. check empty
+3. get size
+4. clear
+1
+Enter integer element to insert
+87
+ 
+Unrolled Linked List =
+23 7 87
+ 
+Do you want to continue (Type y or n)
+ 
+y
+ 
+Unrolled Linked List Operations
+ 
+1. insert
+2. check empty
+3. get size
+4. clear
+1
+Enter integer element to insert
+19
+ 
+Unrolled Linked List =
+23 7 87 19
+ 
+Do you want to continue (Type y or n)
+ 
+y
+ 
+Unrolled Linked List Operations
+ 
+1. insert
+2. check empty
+3. get size
+4. clear
+1
+Enter integer element to insert
+24
+ 
+Unrolled Linked List =
+23 7 87 19 24
+ 
+Do you want to continue (Type y or n)
+ 
+y
+ 
+Unrolled Linked List Operations
+ 
+1. insert
+2. check empty
+3. get size
+4. clear
+1
+Enter integer element to insert
+6
+ 
+Unrolled Linked List =
+23 7 87
+19 24 6
+ 
+Do you want to continue (Type y or n)
+ 
+y
+ 
+Unrolled Linked List Operations
+ 
+1. insert
+2. check empty
+3. get size
+4. clear
+1
+Enter integer element to insert
+94
+ 
+Unrolled Linked List =
+23 7 87
+19 24 6 94
+ 
+Do you want to continue (Type y or n)
+ 
+y
+ 
+Unrolled Linked List Operations
+ 
+1. insert
+2. check empty
+3. get size
+4. clear
+1
+Enter integer element to insert
+28
+ 
+Unrolled Linked List =
+23 7 87
+19 24 6 94 28
+ 
+Do you want to continue (Type y or n)
+ 
+y
+ 
+Unrolled Linked List Operations
+ 
+1. insert
+2. check empty
+3. get size
+4. clear
+1
+Enter integer element to insert
+5
+ 
+Unrolled Linked List =
+23 7 87
+19 24 6
+94 28 5
+ 
+Do you want to continue (Type y or n)
+ 
+y
+ 
+Unrolled Linked List Operations
+ 
+1. insert
+2. check empty
+3. get size
+4. clear
+1
+Enter integer element to insert
+63
+ 
+Unrolled Linked List =
+23 7 87
+19 24 6
+94 28 5 63
+ 
+Do you want to continue (Type y or n)
+ 
+y
+ 
+Unrolled Linked List Operations
+ 
+1. insert
+2. check empty
+3. get size
+4. clear
+3
+Size = 10
+ 
+ 
+Unrolled Linked List =
+23 7 87
+19 24 6
+94 28 5 63
+ 
+Do you want to continue (Type y or n)
+ 
+y
+ 
+Unrolled Linked List Operations
+ 
+1. insert
+2. check empty
+3. get size
+4. clear
+4
+List Cleared
+ 
+ 
+Unrolled Linked List = empty
+ 
+Do you want to continue (Type y or n)
+ 
+y
+ 
+Unrolled Linked List Operations
+ 
+1. insert
+2. check empty
+3. get size
+4. clear
+2
+Empty status = true
+ 
+Unrolled Linked List = empty
+ 
+Do you want to continue (Type y or n)
+ 
+n
+'''
+
+'''
+c language (not work by now)
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <math.h>
+#include <time.h>
+
+int blockSize; //max number of nodes in a block
+
+struct ListNode {
+    struct ListNode *next;
+    int value;
+};
+
+struct LinkedBlock {
+    struct LinkedBlock *next;
+    struct ListNode *head;
+    int nodeCount;
+};
+
+struct LinkedBlock *blockHead;
+
+//create an empty block
+struct LinkedBlock *newLinkedBlock() {
+    struct LinkedBlock *block=(struct LinkedBlock*)malloc(sizeof(struct LinkedBlock));
+    block->next = NULL;
+    block->head = NULL;
+    block->nodeCount = 0;
+    return block;
+}
+
+//create a node
+struct ListNode* newListNode(int value) {
+    struct ListNode* temp=(struct ListNode*)malloc(sizeof(struct ListNode));
+    temp->next = NULL;
+    temp->value = value;
+    return temp;
+}
+
+void searchElementVoid(int k, struct LinkedBlock **fLinkedBlock, struct ListNode **fListNode) {
+    //find the block
+    int j = (k+blockSize-1)/blockSize; //kth node is in the jth block
+    struct LinkedBlock* p = blockHead;
+    while(--j) {
+        p = p->next;
+    }
+
+    *fLinkedBlock = p;
+
+    //find the node
+    struct ListNode *q = p->head;
+    k = k%blockSize;
+    if(k==0) k = blockSize;
+    k=p->nodeCount+1-k;
+    while(k--) {
+        q = q->next;
+    }
+
+    *fListNode = q;
+}
+
+//start shift operation from block *p
+void shift(struct LinkedBlock *A) {
+    struct LinkedBlock *B;
+    struct ListNode* temp;
+    while(A->nodeCount > blockSize) {//if this block still have to shift
+        if(A->next == NULL){//reach the end. A little different
+            A->next=newLinkedBlock();
+            B=A->next;
+            temp=A->head->next;
+            A->head->next=A->head->next->next;
+            B->head=temp;
+            temp->next=temp;
+            A->nodeCount--;
+            B->nodeCount++;
+        } else {
+            B=A->next;
+            temp = A->head->next;
+            A->head->next=A->head->next->next;
+            temp->next=B->head->next;
+            B->head->next=temp;
+            B->head=temp;
+            A->nodeCount--;
+            B->nodeCount++;
+        }
+        A=B;
+    }
+}
+
+void addElement(int k, int x) {
+    struct ListNode *p, *q;
+    struct LinkedBlock *r;
+
+    if(!blockHead) {//initial,first node and block
+        blockHead=newLinkedBlock();
+        blockHead->head=newListNode(x);
+        blockHead->head->next=blockHead->head;
+        blockHead->nodeCount++;
+    }else {
+        if (k==0) {//special case for k=0
+            p = blockHead->head;
+            q = p->next;
+            p->next=newListNode(x);
+            p->next->next=q;
+            blockHead->head=p->next;
+            blockHead->nodeCount++;
+            shift(blockHead);
+        }else{
+            searchElement(k,&r,&p);
+            q = p;
+            while(q->next!=p) q = q->next;
+            q->next=newListNode(x);
+            q->next->next=p;
+            r->nodeCount++;
+            shift(r);
+       }
+    }
+}
+
+int searchElement(int k) {
+    struct ListNode *p;
+    struct LinkedBlock *q;
+    searchElementVoid(k, &q, &p);
+    return p->value;
+}
+
+int testUnRolledLinkedList() {
+    int tt=clock();
+    int m, i, k, x;
+    char cmd[10];
+    scanf("%d", &m);
+    blockSize = (int)(sqrt(m-0.001))+1;
+
+    for(i=0; i<m; i++) {
+        scanf("%s", cmd);
+        if(strcmp(cmd,"add")==0) {
+        	printf("Doing add!");
+            scanf("%d %d", &k, &x);
+            addElement(k, x);
+        } else if(strcmp(cmd, "search")== 0) {
+        	printf("Doing search!");
+            scanf("%d", &k);
+            printf("%d\n", searchElement(k));
+        } else {
+        	printf("Wrong input!");
+            fprintf(stderr, "Wrong Input\n");
+        }
+    }
+
+    return 0;
+}
+
+int main() 
+{
+    testUnRolledLinkedList();    
+}
+'''
