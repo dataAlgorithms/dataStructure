@@ -24,6 +24,10 @@ class SingleLinkedList:
         self._count = 0
 
     # Get the length of single linked list
+    def __len__(self):  
+        return self._count
+    
+    # Get the length of single linked list
     def listLength(self):  
         return self._count
 
@@ -32,7 +36,7 @@ class SingleLinkedList:
         return self.listLength() == 0
 
     # Insert node into single linked list  
-    def listNodeInsert(self, data, position):
+    def listNodeInsertBak(self, data, position):
         
         newNode = _SingleLinkedListNode(data)
         if position == 0: # insert a node at the front
@@ -63,7 +67,49 @@ class SingleLinkedList:
             preNode.next = newNode 
             
         self._count += 1
-                
+
+    def listNodeInsert(self, data, position):
+        assert position >= -1 and position <= len(self), \
+             "Position is out of list length."
+        newNode = _SingleLinkedListNode(data)
+        if len(self) == 1:
+            assert position == 0 or position == -1, \
+                "position is out of range!"
+            if position == 0:
+                newNode.next = self._head 
+                self._head = newNode
+            elif position == -1:
+                self._head.next = newNode  
+                newNode.prev = self._head
+        else:        
+            if position == 0:
+                if self.listIsEmpty():
+                    self._head = newNode 
+                else:
+                    newNode.next = self._head
+                    self._head = newNode
+            elif position == -1:
+                preNode = self._head
+                curNode = self._head
+                while curNode is not None:
+                    preNode = curNode
+                    curNode = curNode.next
+
+                preNode.next = newNode
+            else:                 
+                preNode = self._head
+                curNode = self._head
+                index = 0
+                while curNode.next is not None and index < position:
+                    preNode = curNode
+                    curNode = curNode.next
+                    index += 1
+
+                newNode.next = curNode
+                preNode.next = newNode
+
+        self._count += 1    
+                        
     # Delete node from single linked list
     def listNodeDelete(self, position):
         
@@ -193,11 +239,9 @@ class TestSingleLinkedList(unittest.TestCase):
         
         
 '''
-......
-----------------------------------------------------------------------
-Ran 6 tests in 0.001s
+Finding files... done.
+Importing test modules ... done.
 
-OK
 
 Clear check
 4  3  2  1  
@@ -224,7 +268,11 @@ Insert check!
 2  1  
 2  1  3  4  
 2  1  6  3  5  4  
-2  1  6  3  5  4  7  
+2  1  6  3  5  7  4  
+----------------------------------------------------------------------
+Ran 6 tests in 0.024s
+
+OK
 '''            
 if __name__ == '__main__':  
     unittest.main()  
