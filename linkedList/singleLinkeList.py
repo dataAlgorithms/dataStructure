@@ -26,6 +26,20 @@ class SingleLinkedList:
     # Get the length of single linked list
     def __len__(self):  
         return self._count
+
+        # Get the item
+    def __getitem__(self, pos):
+        assert pos >= -1 and pos < len(self), \
+                "invalid position!"
+        preNode = self._head
+        curNode = self._head 
+        index = 0
+        while curNode is not None and index < pos:
+            preNode = curNode
+            curNode = curNode.next 
+            index += 1
+            
+        return preNode.data 
     
     # Get the length of single linked list
     def listLength(self):  
