@@ -73,6 +73,95 @@ def printNthFromLastTP(head, n):
     print "%s" % main_ptr.data,
     
 '''
+Method 4
+Use hash table
+'''
+    
+class HashTable:
+    def __init__(self, size):
+        self.size = size
+        self.slots = [None] * self.size
+        self.data = [None] * self.size
+
+    def put(self, key, data):
+        hashvalue = self.hashfunction(key, len(self.slots))
+
+        if self.slots[hashvalue] == None:
+            self.slots[hashvalue] = key
+            self.data[hashvalue] = data
+        else:
+            if self.slots[hashvalue] == key:
+                self.data[hashvalue] = data
+            else:
+                nextslot = self.rehash(hashvalue, len(self.slots))
+                while self.slots[nextslot] != None and \
+                        self.slots[nextslot] != key:
+                    nextslot = self.rehash(nextslot, len(self.slots))
+
+                if self.slots[nextslot] == None:
+                    self.slots[nextslot] = key
+                    self.data[nextslot] = data
+                else:
+                    self.data[nextslot] = data
+
+    def hashfunction(self, key, size):
+        return key%size
+
+    def rehash(self, oldhash, size):
+        return (oldhash+1)%size
+
+    def get(self, key):
+        startslot = self.hashfunction(key, len(self.slots))
+
+        data = None
+        stop = False
+        found = False
+        position = startslot
+        while self.slots[position] != None and \
+               not found and not stop:
+            if self.slots[position] == key:
+                found = True
+                data = self.data[position]
+            else:
+                position = self.rehash(position, len(self.slots))
+                if position == startslot:
+                    stop = True
+        return data
+
+    def __getitem__(self, key):
+        return self.get(key)
+
+    def __setitem__(self, key, data):
+        self.put(key, data)
+        
+# Find Nth node of linked list from the end
+def printNthFromLastHT(head, n):
+    
+    len_ = 0
+    curNode = head 
+ 
+    # Count the number of nodes
+    while curNode is not None:
+        curNode = curNode.next
+        len_ += 1
+
+    # Check if value of n is not more than length of the linked list
+    if (len_ < n):
+        return
+    
+    # Use hash table to store key,value for nodeIndex,nodeValue
+    ht = HashTable(len_)
+    
+    curNode = head 
+    index = 0
+    while curNode is not None:
+        ht[index] = curNode.data 
+        curNode = curNode.next 
+        index += 1
+        
+    return ht[len_ -n]
+
+'''
 Use brute force:
 a b c d e 
 
@@ -80,10 +169,13 @@ Use recursive:
 a b c d e 
 
 Use two pointer:
+a b c d e 
+
+Use hash table:
 a b c d e
 '''
 if __name__ == "__main__":
-    from singleLinkeList import SingleLinkedList as LinkedList
+    from singleLinkedList import SingleLinkedList as LinkedList
     sll = LinkedList()
     sll.listNodeInsert('a', 0)
     sll.listNodeInsert('b', 0)
@@ -103,3 +195,7 @@ if __name__ == "__main__":
     print '\r\rUse two pointer:'
     for i in range(1, len(sll)+1):
         printNthFromLastTP(sll._head, i)
+        
+    print '\r\rUse hash table:'
+    for i in range(1, len(sll)+1):
+        print printNthFromLastHT(sll._head, i),
