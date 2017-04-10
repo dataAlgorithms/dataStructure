@@ -19,10 +19,16 @@ def findLoopLength(head):
 
     if loopExists == 1:
         fastPtr = fastPtr.next
-        while slowPtr != fastPtr:
-            fastPtr = fastPtr.next
+        if slowPtr == fastPtr:
+            counter = 1
+        else:
             counter += 1
-    return counter       
+            while slowPtr != fastPtr:
+            
+                fastPtr = fastPtr.next
+                counter += 1
+            
+    return counter           
 
 class _SingleLinkedListNode:
     def __init__(self, data):
@@ -199,7 +205,7 @@ class SingleLinkedList:
     
 '''
 0
-3
+4
 '''
 if __name__ == "__main__":
     sll = SingleLinkedList()
