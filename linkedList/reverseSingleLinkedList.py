@@ -1,16 +1,52 @@
+'''
+Input : Head of following linked list  
+       1->2->3->4->NULL
+Output : Linked list should be changed to,
+       4->3->2->1->NULL
+
+Input : Head of following linked list  
+       1->2->3->4->5->NULL
+Output : Linked list should be changed to,
+       5->4->3->2->1->NULL
+
+Input : NULL
+Output : NULL
+
+Input  : 1->NULL
+Output : 1->NULL
+'''
+
+# Utility function to print the linked LinkedList
+def printList(head):
+    temp = head
+    while(temp):
+        print "%s " % temp.data,
+        temp = temp.next
+    print '\r'
+            
 # Reverse a single linked list using iterative version
+'''
+Iterate trough the linked list. In loop, change next to prev, prev to current and current to next.
+'''
 def reverseListIter(head):
 
     prev = None
+    nextNode = None
     while head is not None:
         nextNode = head.next
         head.next = prev
         prev = head
         head = nextNode
 
-    head = prev
+    return prev
 
 # Reverse a single linked list using recursive way
+'''
+1) Divide the list in two parts - first node and rest of the linked list.
+2) Call reverse for the rest of the linked list.
+3) Link rest to first.
+4) Fix head pointer
+'''
 def reverseListRecur(head):
 
     if head is None:
@@ -93,7 +129,7 @@ class SingleLinkedList:
     
         # If last node mark it head
         if curr.next is None:
-            self.head = curr
+            self._head = curr
     
             # Update next to prev node
             curr.next = prev
@@ -237,6 +273,13 @@ class SingleLinkedList:
     def __iter__(self):
         return _SingleLinkedListIter(self._head)
   
+    # Utility function to print the linked LinkedList
+    def printList(self):
+        temp = self._head
+        while(temp):
+            print temp.data,
+            temp = temp.next
+            
 def main():
  
         stl = SingleLinkedList() 
@@ -250,6 +293,20 @@ def main():
         stl.listTraversal()
         stl.listReverseRecu()
         stl.listTraversal()
+        
+        head = reverseListIter(stl._head)  
+        printList(head)
                         
+        head = reverseListRecur(head)
+        printList(head)
+
+'''
+3  2  1  
+1  2  3  
+3  2  1  
+1  2  3  
+3  2  1  
+1  2  3  
+'''        
 if __name__ == '__main__':  
     main()  
