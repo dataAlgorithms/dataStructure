@@ -282,23 +282,23 @@ class SingleLinkedList:
             
 def main():
  
-        stl = SingleLinkedList() 
-        stl.listNodeInsert(1, 0)
-        stl.listNodeInsert(2, 0)
-        stl.listNodeInsert(3, 0)       
-        stl.listTraversal()
-        stl.listReverseIter()
-        stl.listTraversal()
-        stl.listReverseIter()
-        stl.listTraversal()
-        stl.listReverseRecu()
-        stl.listTraversal()
+    stl = SingleLinkedList() 
+    stl.listNodeInsert(1, 0)
+    stl.listNodeInsert(2, 0)
+    stl.listNodeInsert(3, 0)       
+    stl.listTraversal()
+    stl.listReverseIter()
+    stl.listTraversal()
+    stl.listReverseIter()
+    stl.listTraversal()
+    stl.listReverseRecu()
+    stl.listTraversal()
         
-        head = reverseListIter(stl._head)  
-        printList(head)
+    head = reverseListIter(stl._head)  
+    printList(head)
                         
-        head = reverseListRecur(head)
-        printList(head)
+    head = reverseListRecur(head)
+    printList(head)
 
 '''
 3  2  1  
