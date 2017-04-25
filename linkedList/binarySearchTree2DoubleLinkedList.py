@@ -2,13 +2,13 @@
 
 '''
 1. If left subtree exists, process the left subtree
-��..1.a) Recursively convert the left subtree to DLL.
-��..1.b) Then find inorder predecessor of root in left subtree (inorder predecessor is rightmost node in left subtree).
-��..1.c) Make inorder predecessor as previous of root and root as next of inorder predecessor.
+..1.a) Recursively convert the left subtree to DLL.
+..1.b) Then find inorder predecessor of root in left subtree (inorder predecessor is rightmost node in left subtree).
+..1.c) Make inorder predecessor as previous of root and root as next of inorder predecessor.
 2. If right subtree exists, process the right subtree (Below 3 steps are similar to left subtree).
-��..2.a) Recursively convert the right subtree to DLL.
-��..2.b) Then find inorder successor of root in right subtree (inorder successor is leftmost node in right subtree).
-��..2.c) Make inorder successor as next of root and root as previous of inorder successor.
+..2.a) Recursively convert the right subtree to DLL.
+..2.b) Then find inorder successor of root in right subtree (inorder successor is leftmost node in right subtree).
+..2.c) Make inorder successor as next of root and root as previous of inorder successor.
 '''
 def bst2DllUtil(root):
 
