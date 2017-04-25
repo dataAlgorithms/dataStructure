@@ -1,6 +1,9 @@
 #! coding=utf-8
 
 '''
+Method one: with three step
+'''
+'''
 1. If left subtree exists, process the left subtree
 ..1.a) Recursively convert the left subtree to DLL.
 ..1.b) Then find inorder predecessor of root in left subtree (inorder predecessor is rightmost node in left subtree).
@@ -76,6 +79,85 @@ def printList(head):
     while head is not None:
         print head.data, 
         head = head.right
+
+'''
+Method two: with two steps
+'''
+# Change left pointers to work as previous pointers
+# in converted DLL
+# The function simply does inorder traversal of 
+# Binary tree and updates
+# left pointer using previously visited node
+def static_vars(**kwargs):
+    '''http://stackoverflow.com/questions/279561/what-is-the-Python-equivalent-of-static-variables-inside-a-function'''
+    def decorate(func):
+        for k in kwargs:
+            setattr(func, k, kwargs[k])
+        return func
+    return decorate
+
+@static_vars(prev=None)
+def fixPrevPtr(root):
+    if root is not None: 
+        fixPrevPtr(root.left)
+        root.left = fixPrevPtr.prev
+        fixPrevPtr.prev = root
+        fixPrevPtr(root.right)
+
+# Change right pointers to work as next pointer in
+# converted DLL
+def fixNextPtr(root):
+
+    prev = None
+    # Find the right most node in BT or last node in DLL
+    while root is not None and root.right is not None:
+        root = root.right
+
+    # Start from the rightmost node, traverse back using left pointers
+    # While traversing, change right pointer of nodes
+    while root is not None and root.left is not None:
+        prev = root
+        root = root.left
+        root.right = prev
+
+    # The leftmost node is head of linked list, return it
+    return root
+
+# The main function that converts BST to DLL and returns head of DLL
+def bst2DLL2(root):
+
+    # Set the previous pointer
+    fixPrevPtr(root)
+
+    # Set the next pointer and return head of dll
+    return fixNextPtr(root)    
+                
+'''
+Method 3: using recursive way
+'''
+@static_vars(prev=None)
+def bst2DLL3(root):
+
+    global newhead
+    
+    # Base case
+    if root is None:
+        return
+
+    # Recursively convert left subtree
+    bst2DLL3(root.left)
+
+    # Now convet this node
+    if bst2DLL3.prev is None:
+        newhead = root
+    else:
+        root.left = bst2DLL3.prev
+        bst2DLL3.prev.right = root
+
+    bst2DLL3.prev = root
+
+    # Finally convert right subtree
+    bst2DLL3(root.right)
         
 class Node:
     """
@@ -242,14 +324,8 @@ class Node:
                 yield node.data
                 node = node.right
                 
-'''
-:::Primary binary search tree
-10 12 15 25 30 36 
-
-::Binary search tree to double linked list
-10 12 15 25 30 36
-'''
 def main():
+    print ':::Using method one'
     root = Node(10)
     root.insert(12)
     root.insert(15)
@@ -263,6 +339,59 @@ def main():
     print '\r\r::Binary search tree to double linked list'
     head = bst2Dll(root)
     printList(head)
+    
+    print '\r\r:::Using method two'
+    root1 = Node(10)
+    root1.insert(12)
+    root1.insert(15)
+    root1.insert(25)
+    root1.insert(30)
+    root1.insert(36)
+    
+    print ':::Primary binary search tree'
+    root1.print_tree()
+    
+    print '\r\r::Binary search tree to double linked list'
+    head = bst2DLL2(root1)
+    printList(head)
+    
+    print '\r\r:::Using method three'
+    root2 = Node(10)
+    root2.insert(12)
+    root2.insert(15)
+    root2.insert(25)
+    root2.insert(30)
+    root2.insert(36)
+    
+    print ':::Primary binary search tree'
+    root2.print_tree()
+    
+    print '\r\r::Binary search tree to double linked list'
+    global newhead 
+    bst2DLL3(root2)
+    printList(newhead)
         
+'''
+:::Using method one
+:::Primary binary search tree
+10 12 15 25 30 36 
+
+::Binary search tree to double linked list
+10 12 15 25 30 36 
+
+:::Using method two
+:::Primary binary search tree
+10 12 15 25 30 36 
+
+::Binary search tree to double linked list
+10 12 15 25 30 36 
+
+:::Using method three
+:::Primary binary search tree
+10 12 15 25 30 36 
+
+::Binary search tree to double linked list
+10 12 15 25 30 36
+'''
 if __name__ == "__main__":
-    main()
+    main(),
