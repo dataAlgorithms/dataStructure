@@ -1,7 +1,10 @@
 '''
-Method: Insert sort for single linked list
+Method one: Insert sort for single linked list
 
-refer: http://quiz.geeksforgeeks.org/insertion-sort-for-singly-linked-list/
+1) Create an empty sorted (or result) list
+2) Traverse the given list, do following for every node.
+......a) Insert current node in sorted way in sorted or result list.
+3) Change head of given linked list to head of sorted (or result) list
 '''
 # sort a singly linked list using insertion sort
 def insertSort(h):
@@ -27,6 +30,241 @@ def insertSort(h):
             curr.next= search.next
             search.next= curr
     return sortedList
+
+'''
+Method two: Quick sort for single linked list
+
+In partition(), we consider last element as pivot. We traverse through the current list and if a node 
+has value greater than pivot, we move it after tail. If the node has smaller value, we keep it at its current position.
+In QuickSortRecur(), we first call partition() which places pivot at correct position and returns pivot. After pivot is 
+placed at correct position, we find tail node of left side (list before pivot) and recur for left list.
+ Finally, we recur for right list.
+'''
+# Quick sort wrapper 
+def quickSort(headRef):
+
+    headRef = quickSortRec(headRef, getTail(headRef))
+    return headRef
+
+# Here the sorting happens exclusive of the end node
+def quickSortRec(head, end):
+
+    # base condition
+    if not head or head == end:
+        return head
+
+    newHead = None
+    newEnd = None
+
+    # partition the list, newHead and newEnd will be updated 
+    # by the partition function
+    pivot,newHead,newEnd = partition(head, end, newHead, newEnd)
+
+    # If pivot is the smallest element - no need to recur for
+    # the left part
+    if newHead != pivot:
+        # Set the node before the pivot node as None
+        tmp = newHead
+        while tmp.next != pivot:
+            tmp = tmp.next
+        tmp.next = None
+
+        # Recur for the list before pivot
+        newHead = quickSortRec(newHead, tmp)
+        
+        # Change next of last node of the left half to pivot
+        tmp = getTail(newHead)
+        tmp.next = pivot
+
+    # Recur for the list after the pivot element
+    pivot.next = quickSortRec(pivot.next, newEnd)
+
+    return newHead
+
+# Partition the list taking the last element as the pivot
+def partition(head, end, newHead, newEnd):
+
+    pivot = end
+    prev = None
+    cur = head
+    tail = pivot
+
+    # During partition, both the head and end of the list might change
+    # which is updated in the newHead and newEnd variables
+    while cur != pivot:
+        if cur.data < pivot.data:
+            # First node that has a value less than the pivot - becomes the new head
+            if newHead is None:
+                newHead = cur
+
+            prev = cur
+            cur = cur.next
+        else:
+            # Move cur node to next of tail, and change tail
+            if prev is not None:
+                prev.next = cur.next
+            tmp = cur.next
+            cur.next = None
+            tail.next = cur
+            tail = cur
+            cur = tmp
+
+    # If the pivot data is the smallest element is the current list, pivot becomes the head
+    if newHead is None:
+        newHead = pivot
+
+    # Update the newEnd to the current last node
+    newEnd = tail
+
+    # Return the pivot node
+    return pivot,newHead,newEnd 
+
+# Return the last node of the list
+def getTail(cur):
+
+    while cur is not None and cur.next is not None:
+        cur = cur.next
+
+    return cur
+
+'''
+Method Three: merge sort the single linked list   ---prefered algorithms: sort for single linked list
+'''
+
+'''
+sort the linked list by changing next pointer
+'''
+def mergeSort(headRef):
+
+    head = headRef
+    
+    # Base case -- length 0 or 1
+    if head is None or head.next is None:
+        return head
+
+    # Split head into two sublists
+    frontRef, backRef = frontBackSplit(head)
+
+    # Recursively sort the sublists
+    frontRef = mergeSort(frontRef)
+    backRef = mergeSort(backRef)
+
+    # Merge the two sorted list together
+    headRef = sortedMerge(frontRef, backRef)
+
+    return headRef
+
+def mergeSortLinkedList(A):
+    if A is None or A.next is None:
+        return A
+
+    leftHalf, rightHalf = splitTheList(A)
+
+    left = mergeSortLinkedList(leftHalf)
+    right = mergeSortLinkedList(rightHalf)
+
+    return mergeTheLists(left, right)
+
+'''
+sort merge
+'''
+def sortedMerge(frontRef, backRef):
+
+    # base cases
+    if frontRef is None:
+        return backRef
+    elif backRef is None:
+        return frontRef
+
+    # Pick either frontRef or backRef and recur
+    if frontRef.data <= backRef.data:
+        result = frontRef
+        result.next = sortedMerge(frontRef.next, backRef)
+    else:
+        result = backRef
+        result.next = sortedMerge(frontRef, backRef.next)
+
+    return result
+
+def mergeTheLists(leftHalf, rightHalf):
+    fake_head = _SingleLinkedListNode(None)
+    curr = fake_head
+
+    while leftHalf and rightHalf:
+        if leftHalf.data < rightHalf.data:
+            curr.next = leftHalf
+            leftHalf = leftHalf.next
+
+        else:
+            curr.next = rightHalf
+            rightHalf = rightHalf.next
+
+        curr = curr.next
+
+    if leftHalf == None:
+        curr.next = rightHalf
+
+    elif rightHalf == None:
+        curr.next = leftHalf
+
+    return fake_head.next
+
+'''
+utility function
+
+split the nodes of the given list into front and back halves
+and return the two lists using the reference parameters
+if the length is odd, the extra node should go in the front list
+use the fast/slow pointer strategy
+'''
+def frontBackSplit(source):
+
+    if source is None or source.next is None:
+        # length < 2 cases
+        frontRef = source
+        backRef = None
+    else:
+        slow = source
+        fast = source.next
+
+        # Advacne fast two nodes, and advance slow one node
+        while fast is not None:
+            fast = fast.next
+            if fast is not None:
+                slow = slow.next
+                fast = fast.next
+
+        # slow is beforre the midpoint in the list, so split it in two at that point
+        frontRef = source
+        backRef = slow.next
+        slow.next = None
+
+    return frontRef, backRef
+
+def splitTheList(sourceList):
+    if sourceList == None or sourceList.next == None:
+        leftHalf = sourceList
+        rightHalf = None
+
+        return leftHalf, rightHalf
+
+    else:
+        midPointer = sourceList
+        frontRunner = sourceList.next
+        # totalLength += 1        - This is unnecessary
+
+        while frontRunner != None:
+            frontRunner = frontRunner.next
+
+            if frontRunner != None:
+                frontRunner = frontRunner.next
+                midPointer = midPointer.next
+
+    leftHalf = sourceList
+    rightHalf = midPointer.next
+    midPointer.next = None
+
+    return leftHalf, rightHalf
 
 class _SingleLinkedListNode:
     def __init__(self, data):
@@ -245,19 +483,7 @@ class SingleLinkedList:
             
 def main():
  
-    stl = SingleLinkedList() 
-    stl.listNodeInsert(1, 0)
-    stl.listNodeInsert(2, 0)
-    stl.listNodeInsert(3, 0)       
-    stl.listTraversal()
-
-    head = insertSort(stl._head)
-    while head is not None:
-        print "%s " % head.data,
-        head = head.next
-    
-    print '\r'
-    
+    print ':::Insert sort the single Linked list'    
     stl = SingleLinkedList() 
     stl.listNodeInsert(5, 0)
     stl.listNodeInsert(20, 0)
@@ -271,9 +497,62 @@ def main():
         print "%s " % head.data,
         head = head.next
         
+    print '\r\r:::Quick sort for single linked list'
+    stl = SingleLinkedList() 
+    stl.listNodeInsert(5, 0)
+    stl.listNodeInsert(20, 0)
+    stl.listNodeInsert(4, 0)     
+    stl.listNodeInsert(3, 0)
+    stl.listNodeInsert(30, 0)    
+    stl.listTraversal()
+
+    head = quickSort(stl._head)
+    while head is not None:
+        print "%s " % head.data,
+        head = head.next
+    
+    print '\r\r:::Merge sort for single linked list'
+    stl = SingleLinkedList() 
+    stl.listNodeInsert(5, 0)
+    stl.listNodeInsert(20, 0)
+    stl.listNodeInsert(4, 0)     
+    stl.listNodeInsert(3, 0)
+    stl.listNodeInsert(30, 0)    
+    stl.listTraversal()
+
+    head = mergeSort(stl._head)
+    while head is not None:
+        print "%s " % head.data,
+        head = head.next
+        
+    print '\r\r:::new Merge sort for single linked list'
+    stl = SingleLinkedList() 
+    stl.listNodeInsert(5, 0)
+    stl.listNodeInsert(20, 0)
+    stl.listNodeInsert(4, 0)     
+    stl.listNodeInsert(3, 0)
+    stl.listNodeInsert(30, 0)    
+    stl.listTraversal()
+
+    head = mergeSortLinkedList(stl._head)
+    while head is not None:
+        print "%s " % head.data,
+        head = head.next
+            
 '''
-3  2  1  
-1  2  3  
+:::Insert sort the single Linked list
+30  3  4  20  5  
+3  4  5  20  30  
+
+:::Quick sort for single linked list
+30  3  4  20  5  
+3  4  5  20  30  
+
+:::Merge sort for single linked list
+30  3  4  20  5  
+3  4  5  20  30  
+
+:::new Merge sort for single linked list
 30  3  4  20  5  
 3  4  5  20  30 
 '''
