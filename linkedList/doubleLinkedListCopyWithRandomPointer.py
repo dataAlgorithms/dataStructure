@@ -19,7 +19,7 @@ Ensure that original->next is NULL and return the cloned list
 
 refer:http://www.geeksforgeeks.org/clone-linked-list-next-random-pointer-o1-space/
 '''
-def cloneWithoutExtraSpace(head):
+def cloneWithoutExtraSpaceNode(head):
 
     curr = head
     temp = None
@@ -69,8 +69,82 @@ def cloneWithoutExtraSpace(head):
 
     return temp
 
+def cloneWithoutExtraSpace(head):
+
+    # insert node
+    cur = head
+    while cur is not None:
+        temp = Node(cur.data)
+        temp.next = cur.next
+        cur.next = temp
+        cur = temp.next
+
+    # copy random pointer
+    cur = head
+    while cur is not None:
+        temp = cur.next
+        if cur.random is not None:
+            temp.random = cur.random.next
+        cur = temp.next
+
+    # decouple two links
+    cur = head
+    if head is None:
+        dup = None
+    else:
+        dup = head.next
+
+    while cur is not None:
+        temp = cur.next
+        cur.next = temp.next
+        if temp.next is not None:
+            temp.next = temp.next.next
+        cur = cur.next
+
+    return dup
+
+def cloneWithoutExtraSpaceNew(head):
+    # write your code here
+    if head == None:
+        return None
+        
+    myMap = {}
+    nHead = Node(head.data)
+    myMap[head] = nHead
+    p = head
+    q = nHead
+    while p != None:
+        q.random = p.random
+        if p.next != None:
+            q.next = Node(p.next.data)
+            myMap[p.next] = q.next
+        else:
+            q.next = None
+        p = p.next
+        q = q.next
+    
+    p = nHead
+    while p!= None:
+        if p.random != None:
+            p.random = myMap[p.random]
+        p = p.next
+    return nHead
+
+def printListNew(head):
+    temp = head
+    while temp is not None:
+        random = temp.random
+        if random is not None:
+            randomData = random.data
+        else:
+            randomData = -1
+        
+        print "Data = " + str(temp.data) + ", Random data = " + str(randomData)
+
+        temp = temp.next
+        
 # Utility function to print the list
-def printList(start):
+def printListNode(start):
     
     ptr = start 
     while ptr is not None:
@@ -232,9 +306,9 @@ class LinkedList:
         # Return the head reference of the clone list 
         return LinkedList(newMap.get(id(self.head)))
 
-# Driver class
-def main():
-
+# Create linked list using Linked List
+def createLinkedList():
+    
     # Push data in the linked list
     aList = LinkedList(Node(5))
     aList.push(4)
@@ -248,18 +322,12 @@ def main():
     aList.head.next.next.random = aList.head.next.next.next.next
     aList.head.next.next.next.random = aList.head.next.next.next.next.next
     aList.head.next.next.next.next.random = aList.head.next
-            
-    # Make a clone of the original linked list
-    cloneList = aList.dllCloneUseHash()
-
-    # Print the original and cloned linked list
-    print ":::Original linked list"
-    aList.printList()
-
-    print "\r\r:::Cloned linked list using hash (with extra space)"
-    cloneList.printList()
     
-    # create a new list
+    return aList 
+
+# Create linked list using Node
+def createLinkedListNode():
+    
     start = Node(1)
     start.next = Node(2)
     start.next.next = Node(3)
@@ -279,14 +347,41 @@ def main():
     # 5's random points to 2
     start.next.next.next.next.random = start.next 
     
+    return start    
+    
+# Driver class
+def main():
+
+    # Make a clone of the original linked list
+    aList = createLinkedList()
+    cloneList = aList.dllCloneUseHash()
+
+    # Print the original and cloned linked list
+    print ":::Original linked list"
+    aList.printList()
+
+    print "\r:::Cloned linked list using hash (with extra space)"
+    cloneList.printList()
+    
     # Print the original and cloned linked list
     print "\r:::Original linked list"
-    printList(start)
+    start = createLinkedList()
+    printListNew(start.head)
 
-    print "\r\r:::Cloned linked list without extra space"
-    newCloneList = cloneWithoutExtraSpace(start)
+    print "\r:::Cloned linked list without extra space"
+    newCloneList = cloneWithoutExtraSpace(start.head)
     
-    printList(newCloneList)
+    printListNew(newCloneList)
+    
+    # Print the original and cloned linked list
+    print "\r:::Original linked list node"
+    start = createLinkedListNode()
+    printListNode(start)
+
+    print "\r:::Cloned linked list node without extra space"
+    newCloneList = cloneWithoutExtraSpaceNode(start)
+    
+    printListNode(newCloneList)
     
 
 '''
@@ -297,7 +392,6 @@ Data = 3, Random data = 5
 Data = 4, Random data = -1
 Data = 5, Random data = 2
 
-
 :::Cloned linked list using hash (with extra space)
 Data = 1, Random data = 3
 Data = 2, Random data = 4
@@ -306,14 +400,27 @@ Data = 4, Random data = -1
 Data = 5, Random data = 2
 
 :::Original linked list
+Data = 1, Random data = 3
+Data = 2, Random data = 4
+Data = 3, Random data = 5
+Data = 4, Random data = -1
+Data = 5, Random data = 2
+
+:::Cloned linked list without extra space
+Data = 1, Random data = 3
+Data = 2, Random data = 4
+Data = 3, Random data = 5
+Data = 4, Random data = -1
+Data = 5, Random data = 2
+
+:::Original linked list node
 Data = 1, Random = 3
 Data = 2, Random = 1
 Data = 3, Random = 5
 Data = 4, Random = 5
 Data = 5, Random = 2
 
-
-:::Cloned linked list without extra space
+:::Cloned linked list node without extra space
 Data = 1, Random = 3
 Data = 2, Random = 1
 Data = 3, Random = 5
