@@ -137,3 +137,9 @@ int main()
     return 0;
 }
 
+/*
+ Original stack 
+ 1  2  3  4 
+ Reversed stack 
+ 4  3  2  1 
+ */
