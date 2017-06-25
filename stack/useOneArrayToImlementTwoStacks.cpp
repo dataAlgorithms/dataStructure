@@ -18,8 +18,15 @@ the first element in stack1 is pushed at index 0. The stack2 starts from the rig
 direction. To check for overflow, all we need to check is for space between top elements of both stacks. 
 
 Output:
- Popped element from stack1 is 11
- Popped element from stack2 is 40
+Stack1 is >>
+5
+11
+Stack2 is >>
+10
+15
+7
+Poped element from stack1 is 11
+Poped element from stack2 is 40
 */
 
 
@@ -106,6 +113,41 @@ public:
             exit(1);
         }
     }
+
+    void displayStack1()
+    {
+		int i;
+        if (top1 == -1)
+        {
+            cout << "Stack1 is empty\n";
+        }
+        else
+        {
+            cout << "Stack1 is >>\n";
+            for (i=0; i<= top1; i++)
+            {
+                cout << arr[i];
+                cout << "\n";
+            }
+        }
+    }
+
+    void displayStack2()
+    {
+		int i;
+		
+        if (top2 == size)
+            cout << "Stack2 is empty\n";
+        else
+        {
+            cout << "Stack2 is >>\n";
+            for (i=size-1;i >= top2; i--)
+            {
+                cout << arr[i];
+                cout << "\n";
+            }
+        }
+    }
 };
 
 // Driver program
@@ -117,6 +159,8 @@ int main()
     ts.push2(15);
     ts.push1(11);
     ts.push2(7);
+    ts.displayStack1();
+    ts.displayStack2();
     cout << "Poped element from stack1 is " << ts.pop1();
     ts.push2(40);
     cout << "\nPoped element from stack2 is " << ts.pop2();
