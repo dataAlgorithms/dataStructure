@@ -1,6 +1,11 @@
 /*
 Question:
   Check stack is grow up or down
+  
+Output:
+Address of first local: [2293324]
+Address of second local: [2293260]
+Stack is growing upwards
 */
 
 #include <stdio.h>
