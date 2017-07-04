@@ -189,3 +189,11 @@ int main()
 
     return 0;
 }
+
+附1：
+replace-every-element-with-the-greatest-on-right-side/
+ http://www.geeksforgeeks.org/replace-every-element-with-the-greatest-on-right-side/
+
+附2：
+replace-every-element-with-the-least-greater-element-on-its-right/
+ http://www.geeksforgeeks.org/replace-every-element-with-the-least-greater-element-on-its-right/
