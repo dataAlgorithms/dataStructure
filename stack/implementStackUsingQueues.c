@@ -206,3 +206,50 @@ pop(s)
 // Swapping of names is done to avoid one more movement of all elements 
 // from q2 to q1.
 */
+
+// Method Four
+struct Stack {
+    struct Queue *Q1;
+    struct Queue *Q2;
+}
+
+/*
+Push operation Algorithm:
+ Insert the element in whichever queue is not empty
+   check whether queue Q1 is empty or not, if Q1 is empty then enqueue the element into Q2
+   otherwise Enqueue the element into Q1
+*/
+void Push(struct Stack *S, int data) {
+    if (IsEmptyQueue(S->Q1))
+        EnQueue(S->Q2, data);
+    else
+        EnQueue(S->Q1, data);
+}
+
+/*
+Pop operation algorithms:
+ Transfer n-1 elements to the other queue and delete last from queue for performing pop operation
+  If queue Q1 is not empty then transfer n-1 elements from Q1 to Q2 and then, DeQueue the last element of Q1 and return it
+  If queue Q2 is not empty then transfer n-1 elements from Q2 to Q1 and then, DeQueue the last
+element of Q2 and return it
+*/
+int Pop(struct Stack *S) {
+    int i, size;
+    if (IsEmptyQueue(S->Q2)) {
+        size = Size(S->Q1);
+        i = 0;
+        while (i < size -1) {
+            EnQueue(S->Q2, DeQeueue(S->Q1));
+            i++;
+        }
+        return DeQueue(S->Q1);
+    }
+    else {
+        size = Size(S->Q2);
+        while (i < size-1) {
+            EnQueue(S->Q1, DeQueeu(S->Q2));
+            i++;
+        }
+        return DeQueue(S->Q2);
+    }
+}
