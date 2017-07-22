@@ -1,3 +1,13 @@
+/*
+A queue QQ containing nn items and an empty stack SS are given. 
+It is required to transfer all the items from the queue to the stack, 
+so that the item at the front of queue is on the TOP of the stack, and the 
+order of all other items are preserved. Show how this can be done in O(n)O(n) 
+time using only a constant amount of additional storage. Note that the only 
+operations which can be performed on the queue and stack are Delete, Insert, 
+Push and Pop. Do not assume any implementation of the queue or stack.
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #define bool int
