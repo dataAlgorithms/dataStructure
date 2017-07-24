@@ -81,10 +81,11 @@ int pop(struct sNode** top_ref)
 void print(struct sNode* top)
 {
     printf("\n");
-    while (top != NULL)
+	struct sNode* head = top;
+    while (head != NULL)
     {
-        printf(" %d ", top->data);
-        top = top->next;
+        printf(" %d ", head->data);
+        head = head->next;
     }
 }
 
@@ -169,31 +170,34 @@ int queueIsEmpty(struct Queue *q)
 void printQueue(struct Queue *q)
 {
     printf("\n");
-    while (q->front != NULL)
+	struct QNode *head = q->front; 
+    while (head != NULL)
     {
-        printf(" %d ", q->front->key);
-        q->front = q->front->next;
+        printf(" %d ", head->key);
+        head = head->next;
     }
 }
 
 void queueStack(struct Queue *q)
 {
-/*
-Do
-Delete an item from Q
-Push the item to S
-While (! empty Q); 
 
-Do
-Pop an item from S
-Insert the item to Q
-While (! empty S); 
-
-Do
-Delete an item from Q
-Push the item to S
-While (! empty Q); 
-*/
+    /*
+    Do
+    Delete an item from Q
+    Push the item to S
+    While (! empty Q); 
+    
+    Do
+    Pop an item from S
+    Insert the item to Q
+    While (! empty S); 
+    
+    Do
+    Delete an item from Q
+    Push the item to S
+    While (! empty Q); 
+    */
+    
     // init a stack
     struct sNode *s = NULL;
     int n;
@@ -214,10 +218,19 @@ While (! empty Q);
         push(&s, temp->key);
     }while (!queueIsEmpty(q));
     
+	printf("\n Final Stack");
     print(s);    
 } 
 
 // Driver program
+/*
+ Original stack 
+ 1  2  3  4 
+ Original queue
+ 30  40  50 
+ Final Stack
+ 30  40  50 
+*/
 int main()
 {
     struct sNode *s = NULL;
