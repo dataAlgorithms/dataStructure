@@ -26,6 +26,9 @@ get rear element 10
 after delete rear element new rear 5
 get front element  15
 after delete front element new front 5
+
+Refer:
+http://www.geeksforgeeks.org/implementation-deque-using-circular-array/
 */
 
 #include <iostream>
