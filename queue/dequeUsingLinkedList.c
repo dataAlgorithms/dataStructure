@@ -1,5 +1,4 @@
 /*
-Method 2:
  Implement Double Ended Queue using Linked list
 
 Output:
