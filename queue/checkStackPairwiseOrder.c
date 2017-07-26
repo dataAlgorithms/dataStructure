@@ -6,7 +6,6 @@ odd number of elemenets, the element at the top is left out of a pair
 for example, if the stack of elementss are [4, 5, -2, -3, 11, 10, 5, 
 6, 20], then output should be true becase each of paris 
 (4, 5), (-2, -3), (11, 10), (5, 6) consist of consecutive numbers
-
 Time complexity: O(n)
 Space complexity: O(n)
 */
@@ -224,21 +223,23 @@ void queueStack(struct Queue *q)
     print(s);    
 } 
 
-int checkStackPairwiseOrder(struct Stack *s) {
+int checkStackPairwiseOrder(struct sNode *top) {
     struct Queue *q = createQueue();
+    struct sNode *s = top;
+    
     int pairwiseOrdered = 1;
 
     while (!isEmpty(s))
-        enQueue(q, pop(s));
+        enQueue(q, pop(&s));
 
     while (!queueIsEmpty(q))
-        push(s, deQueue(q));
+        push(&s, deQueue(q)->key);
 
     while (!isEmpty(s)) {
-        int n = Pop(s);
+        int n = pop(&s);
         enQueue(q, n);
         if (!isEmpty(s)) {
-            int m  = pop(s);
+            int m  = pop(&s);
             enQueue(q, m);
             if(abs(n - m) != 1) {
                 pairwiseOrdered = 0;
@@ -247,7 +248,7 @@ int checkStackPairwiseOrder(struct Stack *s) {
     }    
 
     while (!queueIsEmpty(q))
-        push(s, deQueue(q));
+        push(&s, deQueue(q)->key);
     return pairwiseOrdered;
 }        
 
@@ -268,7 +269,7 @@ int main()
     printf("\n Original stack ");
     print(s);
 
-    checkStackPairwiseOrder(s);
+    printf("%d", checkStackPairwiseOrder(s));
 
     return 0;
 }
