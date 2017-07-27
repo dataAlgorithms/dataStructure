@@ -7,6 +7,12 @@ form a sequence of interleave pairs: the first values from each half (11 and 16)
 values from each half (12 and 17), then the third values from each half (13 and 18), and so on. In
 each pair, the value from the first half appears before the value from the second half. Thus, after
 the call, the queue stores the following values: [11, 16, 12, 17, 13, 18, 14, 19, 15, 20].
+
+Time Complexity: 	
+O(n)	
+
+Space Complexity: 	
+O(n)
 */
 #include <stdio.h>
 #include <stdlib.h>
@@ -23,11 +29,11 @@ struct sNode
 // Function prototypes
 void push(struct sNode** top_ref, int new_data);
 int pop(struct sNode** top_ref);
-bool isEmpty(struct sNode* top);
-void print(struct sNode* top);
+bool isEmptyStack(struct sNode* top);
+void printStack(struct sNode* top);
 
 // Check the stack is empty or not
-bool isEmpty(struct sNode* top)
+bool isEmptyStack(struct sNode* top)
 {
     return (top == NULL) ? 1: 0;
 }
@@ -159,7 +165,7 @@ struct QNode *deQueue(struct Queue *q)
 }
 
 // Check queue is empty
-int queueIsEmpty(struct Queue *q) 
+int isEmptyQueue(struct Queue *q) 
 {
     if (q->front == NULL)
         return 1;
@@ -191,36 +197,7 @@ int sizeQueue(struct Queue *q)
     }
     
     return count;
-}
-
-int checkStackPairwiseOrder(struct sNode *top) {
-    struct Queue *q = createQueue();
-    struct sNode *s = top;
-    
-    int pairwiseOrdered = 1;
-
-    while (!isEmpty(s))
-        enQueue(q, pop(&s));
-
-    while (!queueIsEmpty(q))
-        push(&s, deQueue(q)->key);
-
-    while (!isEmpty(s)) {
-        int n = pop(&s);
-        enQueue(q, n);
-        if (!isEmpty(s)) {
-            int m  = pop(&s);
-            enQueue(q, m);
-            if(abs(n - m) != 1) {
-                pairwiseOrdered = 0;
-            }    
-        }
-    }    
-
-    while (!queueIsEmpty(q))
-        push(&s, deQueue(q)->key);
-    return pairwiseOrdered;
-}        
+}      
 
 void interLeavingQueue(struct Queue *q) {
     if (sizeQueue(q) % 2 != 0)
@@ -231,13 +208,13 @@ void interLeavingQueue(struct Queue *q) {
     int i;
     for (i = 0; i < halfSize; i++)
         push(&s, deQueue(q)->key);
-    while (!isEmpty(s))
+    while (!isEmptyStack(s))
         enQueue(q, pop(&s));
     for (i = 0; i < halfSize; i++)
         enQueue(q, deQueue(q)->key);
     for (i = 0; i < halfSize; i++)
         push(&s, deQueue(q)->key);
-    while (!isEmpty(s)) {
+    while (!isEmptyStack(s)) {
         enQueue(q, pop(&s));
         enQueue(q, deQueue(q)->key);
     }
