@@ -78,7 +78,7 @@ int pop(struct sNode** top_ref)
 }
 
 // Print a linked list
-void print(struct sNode* top)
+void printStack(struct sNode* top)
 {
     printf("\n");
 	struct sNode* head = top;
@@ -193,50 +193,6 @@ int sizeQueue(struct Queue *q)
     return count;
 }
 
-void queueStack(struct Queue *q)
-{
-
-    /*
-    Do
-    Delete an item from Q
-    Push the item to S
-    While (! empty Q); 
-    
-    Do
-    Pop an item from S
-    Insert the item to Q
-    While (! empty S); 
-    
-    Do
-    Delete an item from Q
-    Push the item to S
-    While (! empty Q); 
-    */
-    
-    // init a stack
-    struct sNode *s = NULL;
-    int n;
-    struct QNode *temp = NULL;;
-    
-    do {
-        temp = deQueue(q);
-        push(&s, temp->key);
-    }while (!queueIsEmpty(q));
-	
-    do {
-        n = pop(&s);
-        enQueue(q, n);
-    }while (!isEmpty(s));    
-    
-    do {
-        temp = deQueue(q);
-        push(&s, temp->key);
-    }while (!queueIsEmpty(q));
-    
-	printf("\n Final Stack");
-    print(s);    
-} 
-
 int checkStackPairwiseOrder(struct sNode *top) {
     struct Queue *q = createQueue();
     struct sNode *s = top;
@@ -272,17 +228,18 @@ void interLeavingQueue(struct Queue *q) {
 
     struct sNode *s = NULL;
     int halfSize = sizeQueue(q) / 2;
-    for (int i = 0; i < halfSize; i++)
-        push(&s, deQueue(q));
+    int i;
+    for (i = 0; i < halfSize; i++)
+        push(&s, deQueue(q)->key);
     while (!isEmpty(s))
         enQueue(q, pop(&s));
-    for (int i = 0; i < halfSize; i++)
-        enQueue(q, eeQueue(q));
-    for (int i = 0; i < halfSize; i++)
-        push(&s, eeQueue(q));
+    for (i = 0; i < halfSize; i++)
+        enQueue(q, deQueue(q)->key);
+    for (i = 0; i < halfSize; i++)
+        push(&s, deQueue(q)->key);
     while (!isEmpty(s)) {
         enQueue(q, pop(&s));
-        enQueue(q, eeQueue(q));
+        enQueue(q, deQueue(q)->key);
     }
 }
 
