@@ -182,3 +182,28 @@ void LevelOrder(struct BinaryTreeNode *root) {
 
     deleteQueue(q);
 }
+
+/* Helper function that allocates a new node with the
+   given data and NULL left and right pointers. */
+struct BinaryTreeNode * newNode(int data)
+{
+     struct BinaryTreeNode * node = (struct BinaryTreeNode *)
+                                  malloc(sizeof(struct BinaryTreeNode ));
+     node->data = data;
+     node->left = NULL;
+     node->right = NULL;
+ 
+     return(node);
+}
+
+/* Driver program to test above functions*/
+int main()
+{
+     struct BinaryTreeNode *root  = newNode(1);
+     root->left             = newNode(2);
+     root->right           = newNode(3);
+     root->left->left     = newNode(4);
+     root->left->right   = newNode(5); 
+
+     return 0;
+}
