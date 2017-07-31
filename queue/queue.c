@@ -97,7 +97,7 @@ int sizeQueue(struct Queue *q)
 
     int count = 0;
     printf("\n");
-	  struct queueNode *head = q->front; 
+	struct queueNode *head = q->front; 
     while (head != NULL)
     {
         count += 1;
@@ -125,6 +125,26 @@ int queueRear(struct Queue *q)
     return q->rear->key;
 }
 
+//Clear the queue
+int clearQueue(struct Queue *q)
+{
+    struct queueNode *p = NULL;
+    while(q->front){
+        p = q->front;
+        q->front = q->front->next;
+        free(p);
+    }
+    return 0;
+}
+
+//Destroy the queue
+int destroyQueue(struct Queue *q)
+{
+    clearQueue(q);
+    q = NULL;
+    return 0;
+}
+
 // Driver program
 int main()
 {
@@ -140,6 +160,9 @@ int main()
     printQueue(queue); 
     printf("\nFront item is %d", queueFront(queue));
     printf("\nRear item is %d", queueRear(queue));
+    
+    destroyQueue(queue);
+    printQueue(queue);
     
     return 0;
 }
