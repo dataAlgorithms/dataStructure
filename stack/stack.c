@@ -23,7 +23,7 @@ int pop(struct Stack *s);
 bool isEmptyStack(struct Stack *s);
 void printStack(struct Stack *s);
 struct sNode* stackNode(int k);
-int peek(struct Stack *s);
+int top(struct Stack *s);
 
 // A utility function to create a new linked list node.
 struct sNode* stackNode(int k)
@@ -86,7 +86,7 @@ int pop(struct Stack *s)
 }
 
 // Return the top item
-int peek(struct Stack *s)
+int top(struct Stack *s)
 {
     int res;
     struct sNode *top;
@@ -118,7 +118,7 @@ void printStack(struct Stack *s)
     }
 }
 
-// A utility function to create an empty queue
+// A utility function to create an empty stack
 struct Stack *createStack()
 {
 	struct Stack *s = (struct Stack*)malloc(sizeof(struct Stack));
@@ -127,6 +127,25 @@ struct Stack *createStack()
     return s;
 }
 
+//Clear the stack
+int clearStack(struct Stack *s)
+{
+    struct sNode *p = NULL;
+    while(s->top){
+        p = s->top;
+        s->top = s->top->next;
+        free(p);
+    }
+    return 0;
+}
+
+//Destroy the stack
+int destroyStack(struct Stack *s)
+{
+    clearStack(s);
+    s = NULL;
+    return 0;
+}
 
 // Driver program
 int main()
@@ -141,9 +160,12 @@ int main()
     printStack(stack);
     printf("\n%d poped from stack", pop(stack));
     printf("\nthe stack is empty?%d", isEmptyStack(stack));
-    printf("\nthe top of stack is %d", peek(stack));
+    printf("\nthe top of stack is %d", top(stack));
     printStack(stack);
     
+    destroyStack(stack);
+    printStack(stack);
+	    
     return 0;
 }
 
