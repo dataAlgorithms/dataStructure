@@ -11,6 +11,8 @@ struct binaryTreeNode
 void printPostorder(struct binaryTreeNode *node);
 void printInorder(struct binaryTreeNode *node);
 void printPreorder(struct binaryTreeNode *node);
+void printLevelorder(struct binaryTreeNode *root);
+void printGivenLevel(struct binaryTreeNode *root, int level);
 
 /* 
  newTreeNode allocates a new node with the given data
@@ -88,7 +90,51 @@ void printPreorder(struct binaryTreeNode *node)
 
 }
 
+// print level order traversal a tree
+void printLevelorder(struct binaryTreeNode *root)
+{
+    int h = height(root);
+    int i;
 
+    for (i=1; i<=h; i++)
+        printGivenLevel(root, i);
+}
+
+// Print nodes at a given level
+void printGivenLevel(struct binaryTreeNode *root, int level)
+{
+    if (root == NULL)
+        return;
+
+    if (level == 1)
+        printf("%d ", root->data);
+    else if (level > 1)
+    {
+        printGivenLevel(root->left, level-1);
+        printGivenLevel(root->right, level-1);
+    }
+}
+
+/* Compute the height of a tree -- the number of 
+   nodes along the longest path from the root node
+    down to the farthest leaf node*/
+int height(struct binaryTreeNode *root)
+{
+    if (root == NULL)
+        return 0;
+    else 
+    {
+        // Compute the height of each subtree
+        int lheight = height(root->left);
+        int rheight = height(root->right);
+
+        // Use the larger one
+        if (lheight > rheight)
+            return lheight+1;
+        else
+            return rheight+1;
+    }
+}
 
 /*
 Driver program
@@ -100,6 +146,8 @@ Inorder traversal of binary tree is
 4 2 5 1 3
 Postorder traversal of binary tree is
 4 5 2 3 1
+Levelorder traversal of binary tree is
+1 2 3 4 5
 */
 int main()
 {
@@ -129,5 +177,8 @@ NULL NULL
     printf("\nPostorder traversal of binary tree is \n");
     printPostorder(root);
 
+    printf("\nLevelorder traversal of binary tree is \n");
+    printLevelorder(root);
+    
     return 0;
 }
