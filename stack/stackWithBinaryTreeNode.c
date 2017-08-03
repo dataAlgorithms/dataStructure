@@ -22,6 +22,18 @@ struct binaryTreeNode
     struct binaryTreeNode *right;
 };
 
+// Protocols
+struct binaryTreeNode *newTreeNode(int);
+struct stackNode* stackNode(struct binaryTreeNode *);
+void push(struct Stack *, struct binaryTreeNode *);
+bool isEmptyStack(struct Stack *);
+struct binaryTreeNode *pop(struct Stack *);
+struct binaryTreeNode *top(struct Stack *);
+void printStack(struct Stack *);
+struct Stack *createStack();
+int clearStack(struct Stack *);
+int destroyStack(struct Stack *);
+
 /* 
  newTreeNode allocates a new node with the given data
  and NULL left and right pointers
