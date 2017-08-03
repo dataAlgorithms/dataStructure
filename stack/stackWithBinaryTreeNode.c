@@ -4,15 +4,15 @@
 
 /* ------------------------Stack Implemention-------------- */
 // structure of a stack node
-struct sNode
+struct stackNode
 {
     struct binaryTreeNode *data;
-    struct sNode *next;
+    struct stackNode *next;
 };
 
 struct Stack 
 {
-    struct sNode *top;	
+    struct stackNode *top;	
 };
 
 struct binaryTreeNode
@@ -42,9 +42,9 @@ struct binaryTreeNode *newTreeNode(int data)
 }
 
 // A utility function to create a new linked list node.
-struct sNode* stackNode(struct binaryTreeNode *k)
+struct stackNode* stackNode(struct binaryTreeNode *k)
 {
-    struct sNode *temp = (struct sNode*)malloc(sizeof(struct sNode));
+    struct stackNode *temp = (struct stackNode*)malloc(sizeof(struct stackNode));
     temp->data = k;
     temp->next = NULL;
     
@@ -55,7 +55,7 @@ struct sNode* stackNode(struct binaryTreeNode *k)
 void push(struct Stack *s, struct binaryTreeNode *new_data)
 {
     // allocate node
-    struct sNode *new_node = stackNode(new_data);
+    struct stackNode *new_node = stackNode(new_data);
 
     if (new_node == NULL)
     {
@@ -83,7 +83,7 @@ bool isEmptyStack(struct Stack *s)
 struct binaryTreeNode *pop(struct Stack *s)
 {
     struct binaryTreeNode *res;
-    struct sNode *top;
+    struct stackNode *top;
     
     // If stack is empty then error
     if (s->top == NULL)
@@ -105,7 +105,7 @@ struct binaryTreeNode *pop(struct Stack *s)
 struct binaryTreeNode *top(struct Stack *s)
 {
     struct binaryTreeNode *res;
-    struct sNode *top;
+    struct stackNode *top;
     
     // If stack is empty then error
     if (s->top == NULL)
@@ -125,7 +125,7 @@ struct binaryTreeNode *top(struct Stack *s)
 void printStack(struct Stack *s)
 {
     printf("\n");
-	struct sNode *top = s->top;
+	struct stackNode *top = s->top;
 	
     while (top != NULL)
     {
@@ -146,7 +146,7 @@ struct Stack *createStack()
 //Clear the stack
 int clearStack(struct Stack *s)
 {
-    struct sNode *p = NULL;
+    struct stackNode *p = NULL;
     while(s->top){
         p = s->top;
         s->top = s->top->next;
