@@ -1,0 +1,104 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX_Q_SIZE 500
+
+// A binary tree node 
+struct node
+{
+    int data;
+    struct node* left;
+    struct node* right;
+};
+
+// Function prototypes
+struct node** createQueue(int *, int *);
+void enQueue(struct node **, int *, struct node *);
+struct node *deQueue(struct node **, int *);
+
+/* 
+Print node in level order
+
+1) Create an empty queue q
+2) temp_node = root 
+3) Loop while temp_node is not NULL
+    a) print temp_node->data.
+    b) Enqueue temp_node’s children (first left then right children) to q
+    c) Dequeue a node from q and assign it’s value to temp_node
+*/
+void printLevelorder(struct node* root)
+{
+    int rear, front;
+    struct node **queue = createQueue(&front, &rear);
+    struct node *temp_node = root;
+
+    while (temp_node)
+    {
+        printf("%d ", temp_node->data);
+
+        // Enqueue left child
+        if (temp_node->left)
+            enQueue(queue, &rear, temp_node->left);
+     
+        // Enqueue right child
+            enQueue(queue, &rear, temp_node->right);
+
+        // Dequeue node and make it temp_node
+        temp_node = deQueue(queue, &front);
+    }
+}
+
+// createQueue
+struct node** createQueue(int *front, int *rear)
+{
+    struct node **queue = 
+          (struct node **)malloc(sizeof(struct node*)*MAX_Q_SIZE);
+    *front = *rear = 0;
+    return queue;
+}
+
+// enQueue
+void enQueue(struct node **queue, int *rear, struct node *new_node)
+{
+    queue[*rear] = new_node;
+    (*rear)++;
+}
+
+// deQueue
+struct node *deQueue(struct node **queue, int *front)
+{
+    (*front)++;
+    return queue[*front-1];
+}
+
+// binary new node
+struct node* newNode(int data)
+{
+    struct node* node = (struct node*)
+                   malloc(sizeof(struct node));
+    node->data = data;
+    node->left = NULL;
+    node->right = NULL;
+
+    return node;
+}
+
+// driver program
+int main()
+{
+    struct node *root = newNode(1);
+    root->left = newNode(2);
+    root->right = newNode(3);
+    root->left->left = newNode(4);
+    root->left->right = newNode(5);
+
+    printf("Level order traversal of binary tree is \n");
+    printLevelorder(root);
+
+    return 0;
+}
+
+/*
+Output:
+Level order traversal of binary tree is
+1 2 3 4 5
+*/
