@@ -40,7 +40,7 @@ struct Queue
 };
  
 // A utility function to create a new linked list node.
-struct queueNode* newNode(struct binaryTreeNode *k)
+struct queueNode* newQueueNode(struct binaryTreeNode *k)
 {
     struct queueNode *temp = (struct queueNode*)malloc(sizeof(struct queueNode));
     temp->key = k;
@@ -60,7 +60,7 @@ struct Queue *createQueue()
 void enQueue(struct Queue *q, struct binaryTreeNode *k)
 {
     // Create a new LL node
-    struct queueNode *temp = newNode(k);
+    struct queueNode *temp = newQueueNode(k);
  
     // If queue is empty, then new node is front and rear both
     if (q->rear == NULL)
