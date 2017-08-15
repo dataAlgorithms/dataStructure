@@ -579,6 +579,35 @@ int diameter(struct binaryTreeNode *root) {
     return max(lHeight + rHeight + 1, max(lDiameter, rDiameter));
 }
 
+int diameterOpt(struct binaryTreeNode *root, int *height)
+{
+    /* lh -- height of left subtree
+       rh -- height of right subtree
+    */
+    int lh = 0, rh = 0;
+
+    /* ldiameter -- diameter of left subtree
+       rdiameter -- diameter of right subtree
+    */
+    int ldiameter = 0, rdiameter = 0;
+
+    if (root == NULL)
+    {
+        *height = 0;
+        return 0;
+    }
+
+    // get the height
+    ldiameter = diameterOpt(root->left, &lh);
+    rdiameter = diameterOpt(root->right, &rh);
+
+    // height of current node is max of height of left and
+    // right subtree plus 1
+    *height = max(lh, rh) + 1;
+
+    return max(lh + rh + 1, max(ldiameter, rdiameter));
+}
+
 // Driver program
 int main()
 {
@@ -593,7 +622,10 @@ int main()
     printf("Primary binary tree is: \n");
     levelOrderNonRecur(root);
     
-    printf("\n%d", diameter(root));
+    printf("\ndiameter=%d", diameter(root));
+    
+    int height = 0;
+    printf("\ndiameter=%d", diameterOpt(root, &height));
 	
     return 0;
 }
@@ -601,5 +633,6 @@ int main()
 /*
 Primary binary tree is:
 1 2 3 4 5
-4
+diameter=4
+diameter=4
 */
