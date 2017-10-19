@@ -21,7 +21,7 @@ void listTraverse(struct ListNode *head) {
     struct ListNode *current = head;
     
     while (current != NULL) {
-        print("%d ", current->data);
+        printf("%d ", current->data);
         current = current->next;
     }
     
@@ -133,3 +133,43 @@ void deleteLinkedList(struct ListNode **head) {
     }
     *head = NULL;
 }
+
+/* Driver program to test above functions*/
+int main()
+{
+  /* Start with the empty list */
+  struct ListNode* head = NULL;
+
+  // Insert 1, 2, 3, 4, 5, 6.  So linked list becomes 6->NULL
+  insertLinkedList(&head, 6, 1);
+  insertLinkedList(&head, 5, 1);
+  insertLinkedList(&head, 4, 1);
+  insertLinkedList(&head, 3, 1);
+  insertLinkedList(&head, 2, 1);
+  insertLinkedList(&head, 1, 1);
+
+  printf("\n Created Linked list is: ");
+  listTraverse(head);
+  
+  // delete
+  printf("\nLinked list after delete:");
+  deleteNodeFromLinkedList(&head, 1);
+  deleteNodeFromLinkedList(&head, 3);
+  deleteNodeFromLinkedList(&head, 4);
+  listTraverse(head);
+    
+  // delete all linked list
+  printf("\n");
+  deleteLinkedList(&head);
+    
+  listTraverse(head);
+  
+  return 0;
+}
+
+/*
+ Created Linked list is: 1 2 3 4 5 6
+Linked list after delete:2 3 5
+
+--------------------------------
+*/
