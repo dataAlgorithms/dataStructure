@@ -1,0 +1,31 @@
+1. 序列n最大或者最小
+//列表类
+In [1]: import heapq
+In [2]: a = [1, 2, 8, 3, 4]
+In [4]: heapq.nsmallest(2, a)
+Out[4]: [1, 2]
+In [5]: heapq.nlargest(2, a)
+Out[5]: [8, 4]
+
+//字典类
+In [6]: %paste
+portfolio = [
+{'name': 'IBM', 'shares': 100, 'price': 91.1},
+{'name': 'AAPL', 'shares': 50, 'price': 543.22},
+{'name': 'FB', 'shares': 200, 'price': 21.09},
+{'name': 'HPQ', 'shares': 35, 'price': 31.75},
+{'name': 'YHOO', 'shares': 45, 'price': 16.35},
+{'name': 'ACME', 'shares': 75, 'price': 115.65}
+]
+In [17]: heapq.nlargest(3, portfolio, key=lambda s: s['price'])
+Out[17]:
+[{'name': 'AAPL', 'price': 543.22, 'shares': 50},
+ {'name': 'ACME', 'price': 115.65, 'shares': 75},
+ {'name': 'IBM', 'price': 91.1, 'shares': 100}]
+
+In [18]:
+
+2. 排序
+nums = [1, 8, 2, 23, 7, -4, 18, 23, 42, 37, 2]
+heapq.heapify(nums)
+print(nums)
